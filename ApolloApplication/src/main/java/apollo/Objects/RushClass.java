@@ -1,4 +1,6 @@
-package apollo;
+package apollo.Objects;
+
+import apollo.Enum.Semester;
 
 import java.util.List;
 

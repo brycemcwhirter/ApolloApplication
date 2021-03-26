@@ -1,7 +1,9 @@
-package apollo;
+package apollo.Objects;
 
 import java.util.List;
 import java.util.Objects;
+
+import apollo.Enum.Tier;
 
 public class PNM {
 
