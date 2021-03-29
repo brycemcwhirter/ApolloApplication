@@ -4,9 +4,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.ImageIcon;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Color;
 
 /**
  * Controller
@@ -26,6 +28,7 @@ public class Controller {
         // Added a New JLabel. Don't know if this is necesary.
         JLabel label = new JLabel("Apollo");
         label.setBounds(10, 20, 80, 25);
+        label.setBackground(Color.decode("#00A3E0"));
         panel.add(label);
 
         // New Database Button w/ Action Listener
@@ -53,6 +56,7 @@ public class Controller {
         // every time
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBackground(Color.decode("#00A3E0"));
         frame.setVisible(true);
 
     }
