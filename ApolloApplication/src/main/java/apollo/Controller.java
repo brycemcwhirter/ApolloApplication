@@ -3,6 +3,7 @@ package apollo;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,8 +17,6 @@ public class Controller implements ActionListener {
 
         JFrame frame = new JFrame("Apollo");
         frame.setSize(500, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
 
         JPanel panel = new JPanel();
         frame.add(panel);
@@ -25,6 +24,15 @@ public class Controller implements ActionListener {
         JLabel label = new JLabel("Apollo");
         label.setBounds(10, 20, 80, 25);
         panel.add(label);
+
+        JButton newDatabase = new JButton("New Database");
+        panel.add(newDatabase);
+
+        JButton importDatabase = new JButton("Import Database");
+        panel.add(importDatabase);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
     }
 
@@ -35,7 +43,7 @@ public class Controller implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
+        System.out.println(e);
 
     }
 
