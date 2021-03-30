@@ -5,10 +5,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 
 /**
  * Controller
@@ -19,7 +22,7 @@ public class Controller {
 
         // Created New JFrame
         JFrame frame = new JFrame("Apollo");
-        frame.setSize(500, 500);
+        frame.setSize(230, 250);
 
         // Created New JPanel
         JPanel panel = new JPanel();
@@ -27,9 +30,9 @@ public class Controller {
 
         // Added a New JLabel. Don't know if this is necesary.
         JLabel label = new JLabel("Apollo");
-        label.setBounds(10, 20, 80, 25);
+        label.setFont(new Font("Edwardian Script ITC", Font.PLAIN, 45));
+        //label.setBounds(10, 20, 80, 25);
         label.setBackground(Color.decode("#00A3E0"));
-        panel.add(label);
 
         // New Database Button w/ Action Listener
         JButton newDatabase = new JButton("New Database");
@@ -39,7 +42,7 @@ public class Controller {
 
             }
         });
-        panel.add(newDatabase);
+        
 
         // Import Database Button w/ Action Listener
         JButton importDatabase = new JButton("Import Database");
@@ -48,6 +51,12 @@ public class Controller {
                 System.out.println("Import Database");
             }
         });
+        //label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        //newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        //importDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        
+        panel.add(label);
+        panel.add(newDatabase);
         panel.add(importDatabase);
 
         // Showing Frame
@@ -57,6 +66,7 @@ public class Controller {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(Color.decode("#00A3E0"));
+        //frame.pack();
         frame.setVisible(true);
 
     }
