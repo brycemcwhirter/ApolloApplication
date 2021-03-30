@@ -26,6 +26,7 @@ import java.awt.Font;
  * Controller
  */
 public class Controller extends JPanel{
+	static DefaultTableModel model;
 
     /**
 	 * 
@@ -54,7 +55,6 @@ public class Controller extends JPanel{
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
                 createTable();
-
             }
         });
 
@@ -65,12 +65,12 @@ public class Controller extends JPanel{
                 System.out.println("Import Database");
                 createTable();
                 JFileChooser fc = new JFileChooser();
-                int returnVal = fc.showOpenDialog(Controller.this);
-           	 
+                int returnVal = fc.showOpenDialog(fc);
+                
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                	File file = fc.getSelectedFile();
-                	                
-                	BufferedReader reader = null;
+                    File file = fc.getSelectedFile();
+                    
+                    BufferedReader reader = null;
                 	try {
                 		reader = new BufferedReader(new FileReader(file));
                 					
@@ -83,9 +83,13 @@ public class Controller extends JPanel{
                 	} catch (IOException e1) {
                 		e1.printStackTrace();
                 	}
+                	
+                    System.out.println("Opening: " + file.getName() + ".");
+                } else {
+                	System.out.println("Open command cancelled by user.");
                 }
-                });
             }
+              
         });
         // label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         // newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -112,7 +116,7 @@ public class Controller extends JPanel{
     	tableFrame.setSize(750,300);
     	String[] columnNames = {"Name","Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier"};
 
-    	DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+    	model = new DefaultTableModel(columnNames, 0);
     	         
     	JTable table = new JTable(model);
     	table.setPreferredScrollableViewportSize(new Dimension(750, 200));
@@ -120,6 +124,7 @@ public class Controller extends JPanel{
     	        
     	tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START); 
     	tableFrame.setVisible(true);
+    	tableFrame.setLocationRelativeTo(null);
     }
 
     public static void main(String[] args) {
