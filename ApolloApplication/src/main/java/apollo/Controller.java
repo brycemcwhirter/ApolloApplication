@@ -35,7 +35,7 @@ public class Controller extends JPanel{
 	public static void openPage() {
 
         // Created New JFrame
-        JFrame frame = new JFrame("Apollo");
+        final JFrame frame = new JFrame("Apollo");
         frame.setSize(230, 250);
 
         // Created New JPanel
@@ -53,8 +53,8 @@ public class Controller extends JPanel{
         newDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
-                createTable();
-
+                TableDB blank = new TableDB();
+                frame.setContentPane(blank);
             }
         });
 
@@ -63,28 +63,8 @@ public class Controller extends JPanel{
         importDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Import Database");
-                createTable();
-                JFileChooser fc = new JFileChooser();
-                int returnVal = fc.showOpenDialog(Controller.this);
-           	 
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                	File file = fc.getSelectedFile();
-                	                
-                	BufferedReader reader = null;
-                	try {
-                		reader = new BufferedReader(new FileReader(file));
-                					
-                	    String line = null;
-                		while ((line = reader.readLine()) != null) {
-                			String temp[] = line.split(",");
-                						
-                			model.addRow(new Object[]{temp[0], temp[1], temp[2], temp[3], temp[4]});
-                		}
-                	} catch (IOException e1) {
-                		e1.printStackTrace();
-                	}
-                }
-                });
+                TableDB table = new TableDB("bruh");
+                frame.setContentPane(table);
             }
         });
         // label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -107,20 +87,7 @@ public class Controller extends JPanel{
 
     }
     
-    public static void createTable() {
-    	JFrame tableFrame = new JFrame();
-    	tableFrame.setSize(750,300);
-    	String[] columnNames = {"Name","Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier"};
-
-    	DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-    	         
-    	JTable table = new JTable(model);
-    	table.setPreferredScrollableViewportSize(new Dimension(750, 200));
-    	table.setFillsViewportHeight(true);
-    	        
-    	tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START); 
-    	tableFrame.setVisible(true);
-    }
+    
 
     public static void main(String[] args) {
         // Just Calling Open Page
