@@ -25,15 +25,15 @@ import java.awt.Font;
 /**
  * Controller
  */
-public class Controller extends JPanel{
-	static DefaultTableModel model;
+public class Controller extends JPanel {
+    static DefaultTableModel model;
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	public static void openPage() {
+    public static void openPage() {
 
         // Created New JFrame
         final JFrame frame = new JFrame("Apollo");
@@ -66,30 +66,31 @@ public class Controller extends JPanel{
                 createTable();
                 JFileChooser fc = new JFileChooser();
                 int returnVal = fc.showOpenDialog(fc);
-                
+
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
-                    
+
                     BufferedReader reader = null;
-                	try {
-                		reader = new BufferedReader(new FileReader(file));
-                					
-                	    String line = null;
-                		while ((line = reader.readLine()) != null) {
-                			String temp[] = line.split(",");
-                						
-                			model.addRow(new Object[]{temp[0], temp[1], temp[2], temp[3], temp[4]});
-                		}
-                	} catch (IOException e1) {
-                		e1.printStackTrace();
-                	}
-                	
+                    try {
+                        reader = new BufferedReader(new FileReader(file));
+
+                        String line = null;
+                        while ((line = reader.readLine()) != null) {
+                            String temp[] = line.split(",");
+
+                            model.addRow(new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6],
+                                    temp[7] });
+                        }
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+
                     System.out.println("Opening: " + file.getName() + ".");
                 } else {
-                	System.out.println("Open command cancelled by user.");
+                    System.out.println("Open command cancelled by user.");
                 }
             }
-              
+
         });
         // label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
         // newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
@@ -110,21 +111,21 @@ public class Controller extends JPanel{
         frame.setVisible(true);
 
     }
-    
-    public static void createTable() {
-    	JFrame tableFrame = new JFrame();
-    	tableFrame.setSize(750,300);
-    	String[] columnNames = {"Name","Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier"};
 
-    	model = new DefaultTableModel(columnNames, 0);
-    	         
-    	JTable table = new JTable(model);
-    	table.setPreferredScrollableViewportSize(new Dimension(750, 200));
-    	table.setFillsViewportHeight(true);
-    	        
-    	tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START); 
-    	tableFrame.setVisible(true);
-    	tableFrame.setLocationRelativeTo(null);
+    public static void createTable() {
+        JFrame tableFrame = new JFrame();
+        tableFrame.setSize(750, 300);
+        String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+
+        model = new DefaultTableModel(columnNames, 0);
+
+        JTable table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(750, 200));
+        table.setFillsViewportHeight(true);
+
+        tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START);
+        tableFrame.setVisible(true);
+        tableFrame.setLocationRelativeTo(null);
     }
 
     public static void main(String[] args) {

@@ -16,45 +16,46 @@ import javax.swing.table.DefaultTableModel;
 
 public class TableDB extends JPanel {
 
-	static DefaultTableModel model;
-	
-	public TableDB() {
-		String[] columnNames = {"Name","Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier"};
-		model = new DefaultTableModel(columnNames, 0);
-    	JFrame tableFrame = new JFrame();
-    	tableFrame.setSize(750,300);
-    	         
-    	JTable table = new JTable(model);
-    	table.setPreferredScrollableViewportSize(new Dimension(750, 200));
-    	table.setFillsViewportHeight(true);
-    	        
-    	tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START); 
-    	tableFrame.setVisible(true);
+    static DefaultTableModel model;
+
+    public TableDB() {
+        String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+        model = new DefaultTableModel(columnNames, 0);
+        JFrame tableFrame = new JFrame();
+        tableFrame.setSize(750, 300);
+
+        JTable table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(750, 200));
+        table.setFillsViewportHeight(true);
+
+        tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START);
+        tableFrame.setVisible(true);
     }
-	
-	public TableDB(String n) {
-		String[] columnNames = {"Name","Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier"};
-		model = new DefaultTableModel(columnNames, 0);
-		
-		JFileChooser fc = new JFileChooser();
+
+    public TableDB(String n) {
+        String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+        model = new DefaultTableModel(columnNames, 0);
+
+        JFileChooser fc = new JFileChooser();
         int returnVal = fc.showOpenDialog(fc);
-   	 
+
         if (returnVal == JFileChooser.APPROVE_OPTION) {
-        	File file = fc.getSelectedFile();
-        	                
-        	BufferedReader reader = null;
-        	try {
-        		reader = new BufferedReader(new FileReader(file));
-        					
-        	    String line = null;
-        		while ((line = reader.readLine()) != null) {
-        			String temp[] = line.split(",");
-        						
-        			model.addRow(new Object[]{temp[0], temp[1], temp[2], temp[3], temp[4]});
-        		}
-        	} catch (IOException e1) {
-        		e1.printStackTrace();
-        	}
+            File file = fc.getSelectedFile();
+
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new FileReader(file));
+
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    String temp[] = line.split(",");
+
+                    model.addRow(
+                            new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7] });
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
         }
-	}
+    }
 }
