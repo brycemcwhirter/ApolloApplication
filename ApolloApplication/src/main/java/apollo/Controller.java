@@ -31,7 +31,7 @@ public class Controller {
         // Added a New JLabel. Don't know if this is necesary.
         JLabel label = new JLabel("Apollo");
         label.setFont(new Font("Edwardian Script ITC", Font.PLAIN, 45));
-        //label.setBounds(10, 20, 80, 25);
+        // label.setBounds(10, 20, 80, 25);
         label.setBackground(Color.decode("#00A3E0"));
 
         // New Database Button w/ Action Listener
@@ -42,7 +42,6 @@ public class Controller {
 
             }
         });
-        
 
         // Import Database Button w/ Action Listener
         JButton importDatabase = new JButton("Import Database");
@@ -51,10 +50,10 @@ public class Controller {
                 System.out.println("Import Database");
             }
         });
-        //label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        //newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        //importDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        
+        // label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        // newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        // importDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+
         panel.add(label);
         panel.add(newDatabase);
         panel.add(importDatabase);
@@ -66,7 +65,7 @@ public class Controller {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(Color.decode("#00A3E0"));
-        //frame.pack();
+        // frame.pack();
         frame.setVisible(true);
 
     }
