@@ -36,7 +36,7 @@ public class Controller extends JPanel{
 	public static void openPage() {
 
         // Created New JFrame
-        JFrame frame = new JFrame("Apollo");
+        final JFrame frame = new JFrame("Apollo");
         frame.setSize(230, 250);
 
         // Created New JPanel
@@ -54,7 +54,12 @@ public class Controller extends JPanel{
         newDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
+<<<<<<< HEAD
                 createTable();
+=======
+                TableDB blank = new TableDB();
+                frame.setContentPane(blank);
+>>>>>>> 2fd91219d09cd5a7c9d91e2bf9ecb791f16c5202
             }
         });
 
@@ -63,6 +68,7 @@ public class Controller extends JPanel{
         importDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Import Database");
+<<<<<<< HEAD
                 createTable();
                 JFileChooser fc = new JFileChooser();
                 int returnVal = fc.showOpenDialog(fc);
@@ -88,6 +94,10 @@ public class Controller extends JPanel{
                 } else {
                 	System.out.println("Open command cancelled by user.");
                 }
+=======
+                TableDB table = new TableDB("bruh");
+                frame.setContentPane(table);
+>>>>>>> 2fd91219d09cd5a7c9d91e2bf9ecb791f16c5202
             }
               
         });
@@ -111,6 +121,7 @@ public class Controller extends JPanel{
 
     }
     
+<<<<<<< HEAD
     public static void createTable() {
     	JFrame tableFrame = new JFrame();
     	tableFrame.setSize(750,300);
@@ -126,6 +137,9 @@ public class Controller extends JPanel{
     	tableFrame.setVisible(true);
     	tableFrame.setLocationRelativeTo(null);
     }
+=======
+    
+>>>>>>> 2fd91219d09cd5a7c9d91e2bf9ecb791f16c5202
 
     public static void main(String[] args) {
         // Just Calling Open Page
