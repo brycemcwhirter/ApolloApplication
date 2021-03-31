@@ -16,6 +16,10 @@ import javax.swing.table.DefaultTableModel;
 
 public class TableDB extends JPanel {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     static DefaultTableModel model;
 
     public TableDB() {
