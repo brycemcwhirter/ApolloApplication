@@ -21,6 +21,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 
 /**
  * Controller
@@ -46,8 +47,11 @@ public class Controller extends JPanel {
         // Added a New JLabel. Don't know if this is necesary.
         JLabel label = new JLabel("Apollo");
         label.setFont(new Font("Edwardian Script ITC", Font.PLAIN, 45));
-        // label.setBounds(10, 20, 80, 25);
+        label.setForeground(new Color(254, 209, 65));
         label.setBackground(Color.decode("#00A3E0"));
+
+        // Image Icon Code
+        // ImageIcon logo = new ImageIcon("Apollo.png");
 
         // New Database Button w/ Action Listener
         JButton newDatabase = new JButton("New Database");
@@ -99,6 +103,7 @@ public class Controller extends JPanel {
         panel.add(label);
         panel.add(newDatabase);
         panel.add(importDatabase);
+        panel.setBackground(new Color(0, 163, 224));
 
         // Showing Frame
         // Just found this set location relative to
@@ -106,7 +111,7 @@ public class Controller extends JPanel {
         // every time
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBackground(Color.decode("#00A3E0"));
+        frame.getContentPane().setBackground(new Color(0, 163, 224));
         // frame.pack();
         frame.setVisible(true);
 
@@ -114,7 +119,8 @@ public class Controller extends JPanel {
 
     public static void createTable() {
         JFrame tableFrame = new JFrame();
-        tableFrame.setSize(750, 300);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        tableFrame.setSize(screenSize.width, screenSize.height);
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 
         model = new DefaultTableModel(columnNames, 0);
