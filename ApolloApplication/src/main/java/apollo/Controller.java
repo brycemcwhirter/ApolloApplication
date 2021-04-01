@@ -5,8 +5,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import apollo.Objects.RushClass;
+
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -21,6 +26,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 
 /**
  * Controller
@@ -28,9 +34,6 @@ import java.awt.Font;
 public class Controller extends JPanel {
     static DefaultTableModel model;
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     public static void openPage() {
@@ -55,6 +58,7 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
                 createTable();
+                createRushClass();
             }
         });
 
@@ -89,12 +93,10 @@ public class Controller extends JPanel {
                 } else {
                     System.out.println("Open command cancelled by user.");
                 }
+                createRushClass();
             }
 
         });
-        // label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        // newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        // importDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
 
         panel.add(label);
         panel.add(newDatabase);
@@ -113,7 +115,7 @@ public class Controller extends JPanel {
     }
 
     public static void createTable() {
-        JFrame tableFrame = new JFrame();
+        JFrame tableFrame = new JFrame("Database");
         tableFrame.setSize(750, 300);
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 
@@ -124,8 +126,73 @@ public class Controller extends JPanel {
         table.setFillsViewportHeight(true);
 
         tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START);
+        
+        JButton addPerson = new JButton("Add Person");
+        addPerson.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Add Person");
+            }
+        });
+        
+        JButton removePerson = new JButton("Remove Person");
+        removePerson.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Remove Person");
+            }
+        });
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(addPerson);
+        buttonPanel.add(removePerson);
+        tableFrame.add(buttonPanel, BorderLayout.PAGE_END);
         tableFrame.setVisible(true);
         tableFrame.setLocationRelativeTo(null);
+    }
+    
+    public static void createRushClass() {
+    	final RushClass mainRushClass = new RushClass();
+    	
+    	GridLayout layout = new GridLayout(0,2);
+    	JPanel mainPanel = new JPanel();
+    	mainPanel.setLayout(layout);
+    	
+    	final JFrame popup = new JFrame("Create Rush Class");
+    	final JTextField year = new JTextField();
+    	JLabel yearLabel = new JLabel("Year:");
+    	year.setBounds(20, 220, 100, 25);
+    	
+    	mainPanel.add(yearLabel);
+    	mainPanel.add(year);
+    	
+    	String[] semesters = {"FALL", "SPRING"};
+    	final JComboBox<String> semesterList = new JComboBox<String>(semesters);
+    	semesterList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String input = (String) semesterList.getSelectedItem();
+                System.out.println(input);
+                //mainRushClass.setS(FALL);
+            }
+        });
+    	
+    	popup.add(mainPanel, BorderLayout.NORTH);
+    	popup.add(semesterList);
+    	popup.setVisible(true);
+        popup.setLocationRelativeTo(null);
+        popup.setSize(300,120);
+        
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Submit");
+                mainRushClass.setYear(Integer.parseInt(year.getText()));
+                
+                popup.setVisible(false);
+                popup.dispose();
+            }
+        });
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(submitButton);
+        popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
 
     public static void main(String[] args) {
