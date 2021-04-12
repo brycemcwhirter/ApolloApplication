@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.System.Logger;
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -124,26 +125,63 @@ public class Controller extends JPanel {
 
     public static void mainPage() {
         JFrame mainFrame = new JFrame();
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(2,1));
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setSize(screenSize.width, screenSize.height);
 
-        tablePanel(mainFrame);
+        topButtonPanel(mainPanel);
+        tablePanel(mainPanel);
 
 
+        mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
         mainFrame.setLocationRelativeTo(null);
 
         
     }
 
-    public void topButtonPanel() {
+    
+    /** 
+     * @param frame
+     */
+    public static void topButtonPanel(JPanel panel) {
+
+        JPanel topButtonPanel = new JPanel();
+
+        JButton addNewPerson = new JButton("Add Person");
+        addNewPerson.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Add Person");
+                
+            }
+        });
+
+        JButton removePerson = new JButton("Remove Person");
+        removePerson.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Remove Person");
+                
+            }
+        });
+
+
+        topButtonPanel.add(addNewPerson);
+        topButtonPanel.add(removePerson);
         
+        topButtonPanel.setVisible(true);
+
+        panel.add(topButtonPanel, BorderLayout.CENTER);
     }
 
 
 
 
-    public static void tablePanel(JFrame frame) {
+    
+    /** 
+     * @param frame
+     */
+    public static void tablePanel(JPanel panel) {
         
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 
@@ -153,9 +191,13 @@ public class Controller extends JPanel {
         table.setPreferredScrollableViewportSize(new Dimension(750, 200));
         table.setFillsViewportHeight(true);
 
-        frame.add(new JScrollPane(table), BorderLayout.PAGE_START);  
+        panel.add(new JScrollPane(table), BorderLayout.PAGE_END);  
     }
 
+    
+    /** 
+     * @param args
+     */
     public static void main(String[] args) {
         // Just Calling Open Page
         openDialogue();
