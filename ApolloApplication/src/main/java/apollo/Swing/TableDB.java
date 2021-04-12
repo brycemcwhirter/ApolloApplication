@@ -1,4 +1,4 @@
-package apollo;
+package apollo.Swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
