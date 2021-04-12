@@ -45,6 +45,7 @@ public class Controller extends JPanel {
      * openDialogue
      * 
      * Sets up the Open Sequence for the Apollo Application
+     * 
      */
     public static void openDialogue() {
 
@@ -158,7 +159,7 @@ public class Controller extends JPanel {
     public static void setTopButtonPanel(JFrame mainFrame) {
 
         JPanel topButtonPanel = new JPanel();
-        topButtonPanel.setLayout(new FlowLayout());
+        //topButtonPanel.setLayout(new FlowLayout());
 
         JButton addNewPerson = new JButton("Add Person");
         addNewPerson.addActionListener(new ActionListener() {
@@ -222,7 +223,7 @@ public class Controller extends JPanel {
 *
 * Calls open Dialogue and Begins the Application
 */
-    public static void main() {
+    public static void main(String[] args) {
         // Just Calling Open Page
         openDialogue();
     }

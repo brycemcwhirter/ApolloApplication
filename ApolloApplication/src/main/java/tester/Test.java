@@ -26,7 +26,7 @@ public class Test {
 		frame.setVisible(true);
 	}
 
-	public static void main(String[] args) {
+	public static void main() {
 		// Schedule a job for the event-dispatching thread:
 		// creating and showing this application's GUI.
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
