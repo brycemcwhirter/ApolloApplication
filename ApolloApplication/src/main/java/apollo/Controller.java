@@ -21,6 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.System.Logger;
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,6 +41,11 @@ public class Controller extends JPanel {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * openDialogue
+     * 
+     * Sets up the Open Sequence for the Apollo Application
+     */
     public static void openDialogue() {
 
         // Created New JFrame
@@ -102,9 +108,7 @@ public class Controller extends JPanel {
             }
 
         });
-        // label.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        // newDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
-        // importDatabase.setAlignmentX(JComponent.CENTER_ALIGNMENT);
+        
 
         panel.add(label);
         panel.add(newDatabase);
@@ -123,31 +127,38 @@ public class Controller extends JPanel {
 
     }
 
+    /**
+     * mainPage
+     * 
+     * Opens up the main page and sets up panels
+     */
     public static void mainPage() {
         JFrame mainFrame = new JFrame();
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(2,1));
+       
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setSize(screenSize.width, screenSize.height);
 
-        topButtonPanel(mainPanel);
-        tablePanel(mainPanel);
+        setTopButtonPanel(mainFrame);
+        setTablePanel(mainFrame);
 
 
-        mainFrame.add(mainPanel);
         mainFrame.setVisible(true);
         mainFrame.setLocationRelativeTo(null);
-
-        
     }
 
     
     /** 
-     * @param frame
+     * setTopButtonPanel
+     * 
+     * Creates the Button Panel on top of the open page that holds
+     * the buttons for adding/removing people. 
+     * 
+     * @param   mainFrame   the main frame of the open page
      */
-    public static void topButtonPanel(JPanel panel) {
+    public static void setTopButtonPanel(JFrame mainFrame) {
 
         JPanel topButtonPanel = new JPanel();
+        topButtonPanel.setLayout(new FlowLayout());
 
         JButton addNewPerson = new JButton("Add Person");
         addNewPerson.addActionListener(new ActionListener() {
@@ -168,10 +179,9 @@ public class Controller extends JPanel {
 
         topButtonPanel.add(addNewPerson);
         topButtonPanel.add(removePerson);
-        
         topButtonPanel.setVisible(true);
 
-        panel.add(topButtonPanel, BorderLayout.CENTER);
+        mainFrame.getContentPane().add(topButtonPanel);
     }
 
 
@@ -179,11 +189,20 @@ public class Controller extends JPanel {
 
     
     /** 
-     * @param frame
+     * setTablePanel
+     * 
+     * Adds the Table to a Tabel Panel which then adds that
+     * panel to the main frame
+     * @param   mainFrame   the main frame of the open page
      */
-    public static void tablePanel(JPanel panel) {
+    public static void setTablePanel(JFrame mainFrame) {
         
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+
+        //TODO fix this function so that the table does not take up the whole screen and shows data
+
+
+        JPanel tablePanel = new JPanel();
 
         model = new DefaultTableModel(columnNames, 0);
 
@@ -191,14 +210,19 @@ public class Controller extends JPanel {
         table.setPreferredScrollableViewportSize(new Dimension(750, 200));
         table.setFillsViewportHeight(true);
 
-        panel.add(new JScrollPane(table), BorderLayout.PAGE_END);  
+        tablePanel.add(table);
+        tablePanel.setVisible(true);
+
+        mainFrame.add(tablePanel);  
     }
 
     
-    /** 
-     * @param args
-     */
-    public static void main(String[] args) {
+/**
+* Main
+*
+* Calls open Dialogue and Begins the Application
+*/
+    public static void main() {
         // Just Calling Open Page
         openDialogue();
     }
