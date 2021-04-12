@@ -82,6 +82,7 @@ public class Controller extends JPanel {
                 System.out.println("Import Database");
                 mainPage();
                 JFileChooser fc = new JFileChooser();
+                fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
                 int returnVal = fc.showOpenDialog(fc);
 
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
