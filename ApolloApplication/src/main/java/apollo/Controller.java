@@ -134,6 +134,8 @@ public class Controller extends JPanel {
      * Opens up the main page and sets up panels
      */
     public static void mainPage() {
+
+        //TODO fix this error. I might need to make a main panel and add the button & table panel in there rather than just the frame
         JFrame mainFrame = new JFrame();
        
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -143,8 +145,9 @@ public class Controller extends JPanel {
         setTablePanel(mainFrame);
 
 
-        mainFrame.setVisible(true);
         mainFrame.setLocationRelativeTo(null);
+        mainFrame.setVisible(true);
+
     }
 
     
@@ -211,10 +214,10 @@ public class Controller extends JPanel {
         table.setPreferredScrollableViewportSize(new Dimension(750, 200));
         table.setFillsViewportHeight(true);
 
-        tablePanel.add(table);
+        tablePanel.add(new JScrollPane(table));
         tablePanel.setVisible(true);
 
-        mainFrame.add(tablePanel);  
+        mainFrame.getContentPane().add(tablePanel);  
     }
 
     
