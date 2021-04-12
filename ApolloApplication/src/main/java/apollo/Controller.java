@@ -1,5 +1,7 @@
 package apollo;
 
+
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,16 +19,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
 
+
 /**
  * Controller
  */
 public class Controller extends JPanel {
+
     static DefaultTableModel model;
 
     /**
@@ -137,7 +142,6 @@ public class Controller extends JPanel {
     public static void main(String[] args) {
         // Just Calling Open Page
         openPage();
-        System.out.println("hi");
     }
 
 }
