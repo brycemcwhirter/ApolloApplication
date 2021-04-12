@@ -39,7 +39,7 @@ public class Controller extends JPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    public static void openPage() {
+    public static void openDialogue() {
 
         // Created New JFrame
         final JFrame frame = new JFrame("Apollo");
@@ -63,7 +63,7 @@ public class Controller extends JPanel {
         newDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
-                createTable();
+                mainPage();
             }
         });
 
@@ -72,7 +72,7 @@ public class Controller extends JPanel {
         importDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Import Database");
-                createTable();
+                mainPage();
                 JFileChooser fc = new JFileChooser();
                 int returnVal = fc.showOpenDialog(fc);
 
@@ -122,10 +122,29 @@ public class Controller extends JPanel {
 
     }
 
-    public static void createTable() {
-        JFrame tableFrame = new JFrame();
+    public static void mainPage() {
+        JFrame mainFrame = new JFrame();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        tableFrame.setSize(screenSize.width, screenSize.height);
+        mainFrame.setSize(screenSize.width, screenSize.height);
+
+        tablePanel(mainFrame);
+
+
+        mainFrame.setVisible(true);
+        mainFrame.setLocationRelativeTo(null);
+
+        
+    }
+
+    public void topButtonPanel() {
+        
+    }
+
+
+
+
+    public static void tablePanel(JFrame frame) {
+        
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 
         model = new DefaultTableModel(columnNames, 0);
@@ -134,14 +153,12 @@ public class Controller extends JPanel {
         table.setPreferredScrollableViewportSize(new Dimension(750, 200));
         table.setFillsViewportHeight(true);
 
-        tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START);
-        tableFrame.setVisible(true);
-        tableFrame.setLocationRelativeTo(null);
+        frame.add(new JScrollPane(table), BorderLayout.PAGE_START);  
     }
 
     public static void main(String[] args) {
         // Just Calling Open Page
-        openPage();
+        openDialogue();
     }
 
 }
