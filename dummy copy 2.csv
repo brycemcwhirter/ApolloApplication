@@ -1,0 +1,5 @@
+Animal,ID,Name,Age,Weight,Breed,Color
+Pig,1,Vasil,3,200,,,   
+Dog,2,Rex,2,,Doberman,, 
+Cat,3,Linda,5,,,Blue 
+Horse,4,Spirit,4,,,,    
