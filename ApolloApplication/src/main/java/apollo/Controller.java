@@ -35,6 +35,8 @@ import java.awt.Toolkit;
 public class Controller extends JPanel {
 
     static DefaultTableModel model;
+    static JFrame mainFrame = new JFrame();
+    final static JPanel mainPanel = new JPanel();
 
     /**
      * 
@@ -139,8 +141,7 @@ public class Controller extends JPanel {
         /**
          * Main Panel Settings
          */
-        JFrame mainFrame = new JFrame();
-        JPanel mainPanel = new JPanel();
+        
         mainPanel.setLayout(new GridLayout(2,1));
        
         /**
@@ -230,7 +231,10 @@ public class Controller extends JPanel {
         JButton graphicView = new JButton("Graphic View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                //TODO Modify graphic view button to show graphic view of PNM's
                 System.out.println("Graphic View");
+                Controller.setGraphicPanel(Controller.mainPanel);
+                
                 
             }
         });
@@ -254,10 +258,7 @@ public class Controller extends JPanel {
     }
 
     
-   
 
-
-    
     /** 
      * setTablePanel
      * 
@@ -280,7 +281,23 @@ public class Controller extends JPanel {
 
     }
 
+
+    //TODO Modify graphic panel to show graphics
+    public static void setGraphicPanel(JPanel mainPanel){
+
+        JPanel graphicPanel = new JPanel();
+
+
+        JLabel graphicLabel = new JLabel("graphic view here");
+
+        graphicPanel.add(graphicLabel);
+        mainPanel.add(graphicPanel);
+
+
+    }
     
+
+
     /**
     * Main
     *
