@@ -136,6 +136,7 @@ public class Controller extends JPanel {
      */
     public static void mainPage() {
 
+        
         JFrame mainFrame = new JFrame();
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(2,1));
@@ -166,14 +167,24 @@ public class Controller extends JPanel {
         JPanel topButtonPanel = new JPanel();
         //topButtonPanel.setLayout(new FlowLayout());
 
+        /** Add New Person
+         * 
+         * This button is responsible for adding
+         * a new person to the list
+         */
         JButton addNewPerson = new JButton("Add Person");
         addNewPerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Add Person");
                 
-            }
+            } 
         });
 
+        /** Remove Person
+         * 
+         * This button is responsible for removing
+         * an old person to the list
+         */
         JButton removePerson = new JButton("Remove Person");
         removePerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -183,16 +194,50 @@ public class Controller extends JPanel {
         });
 
 
+        /** List View
+         * 
+         * This button organizes the table into a list view
+         */
+        JButton listView = new JButton("List View");
+        listView.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("List View");
+                
+            } 
+        });
+
+
+        /** Graphic View
+         * 
+         * This button organizes the table into a graphic view
+         */
+        JButton graphicView = new JButton("Graphic View");
+        graphicView.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Graphic View");
+                
+            }
+        });
+
+
+        // Adding Buttons to the button panel
         topButtonPanel.add(addNewPerson);
         topButtonPanel.add(removePerson);
+        topButtonPanel.add(listView);
+        topButtonPanel.add(graphicView);
+
+
+        // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         topButtonPanel.setSize(screenSize.width, 500);
         topButtonPanel.setVisible(true);
 
+        // Adding button panel to main panel 
         mainPanel.add(topButtonPanel);
     }
 
-
+    
+   
 
 
     
@@ -208,10 +253,6 @@ public class Controller extends JPanel {
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 
         //TODO fix this function so that the table does not take up the whole screen and shows data
-
-
-        JPanel tablePanel = new JPanel();
-
         model = new DefaultTableModel(columnNames, 0);
 
         JTable table = new JTable(model);
@@ -220,9 +261,6 @@ public class Controller extends JPanel {
 
         mainPanel.add(new JScrollPane(table));
 
-        // tablePanel.add(new JScrollPane(table));
-        // tablePanel.setVisible(true);
-        // mainPanel.add(tablePanel);
     }
 
     
