@@ -136,16 +136,17 @@ public class Controller extends JPanel {
      */
     public static void mainPage() {
 
-        //TODO fix this error. I might need to make a main panel and add the button & table panel in there rather than just the frame
         JFrame mainFrame = new JFrame();
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new GridLayout(2,1));
        
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setSize(screenSize.width, screenSize.height);
 
-        setTopButtonPanel(mainFrame);
-        setTablePanel(mainFrame);
+        setTopButtonPanel(mainPanel);
+        setTablePanel(mainPanel);
 
-
+        mainFrame.add(mainPanel);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
 
@@ -158,9 +159,9 @@ public class Controller extends JPanel {
      * Creates the Button Panel on top of the open page that holds
      * the buttons for adding/removing people. 
      * 
-     * @param   mainFrame   the main frame of the open page
+     * @param   mainPanel   the main panel of the open page
      */
-    public static void setTopButtonPanel(JFrame mainFrame) {
+    public static void setTopButtonPanel(JPanel mainPanel) {
 
         JPanel topButtonPanel = new JPanel();
         //topButtonPanel.setLayout(new FlowLayout());
@@ -184,9 +185,11 @@ public class Controller extends JPanel {
 
         topButtonPanel.add(addNewPerson);
         topButtonPanel.add(removePerson);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        topButtonPanel.setSize(screenSize.width, 500);
         topButtonPanel.setVisible(true);
 
-        mainFrame.getContentPane().add(topButtonPanel);
+        mainPanel.add(topButtonPanel);
     }
 
 
@@ -198,9 +201,9 @@ public class Controller extends JPanel {
      * 
      * Adds the Table to a Tabel Panel which then adds that
      * panel to the main frame
-     * @param   mainFrame   the main frame of the open page
+     * @param   mainPanel   the main panel of the open page
      */
-    public static void setTablePanel(JFrame mainFrame) {
+    public static void setTablePanel(JPanel mainPanel) {
         
         String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 
@@ -215,10 +218,11 @@ public class Controller extends JPanel {
         table.setPreferredScrollableViewportSize(new Dimension(750, 200));
         table.setFillsViewportHeight(true);
 
-        tablePanel.add(new JScrollPane(table));
-        tablePanel.setVisible(true);
+        mainPanel.add(new JScrollPane(table));
 
-        mainFrame.getContentPane().add(tablePanel);  
+        // tablePanel.add(new JScrollPane(table));
+        // tablePanel.setVisible(true);
+        // mainPanel.add(tablePanel);
     }
 
     
