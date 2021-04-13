@@ -14,6 +14,7 @@ import apollo.Enum.Semester;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionEvent;
@@ -41,6 +42,10 @@ public class Controller extends JPanel {
     final static JPanel mainPanel = new JPanel();
     static RushClass mainRushClass;
     static JTable table;
+    private static JTextField[] editFields;
+	private static JLabel[] editLabels;
+	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+	static JButton submitButton;
 
     /**
      * 
@@ -88,32 +93,7 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Import Database");
                 mainPage();
-                JFileChooser fc = new JFileChooser();
-                fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-                int returnVal = fc.showOpenDialog(fc);
-
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fc.getSelectedFile();
-
-                    BufferedReader reader = null;
-                    try {
-                        reader = new BufferedReader(new FileReader(file));
-
-                        String line = null;
-                        while ((line = reader.readLine()) != null) {
-                            String temp[] = line.split(",");
-
-                            model.addRow(new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6],
-                                    temp[7] });
-                        }
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-
-                    System.out.println("Opening: " + file.getName() + ".");
-                } else {
-                    System.out.println("Open command cancelled by user.");
-                }
+                importFile();
                 createRushClass();
             }
 
@@ -135,6 +115,38 @@ public class Controller extends JPanel {
         // frame.pack();
         frame.setVisible(true);
 
+    }
+    
+    public static void importFile() {
+    	JFileChooser fc = new JFileChooser();
+        fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        int returnVal = fc.showOpenDialog(fc);
+
+        //Check if file is opened
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new FileReader(file));
+
+                String line = null;
+                //Parse through file
+                while ((line = reader.readLine()) != null) {
+                    String temp[] = line.split(",");
+
+                    //Add person to the table
+                    model.addRow(new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6],
+                            temp[7] });
+                }
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+            System.out.println("Opening: " + file.getName() + ".");
+        } else {
+            System.out.println("Open command cancelled by user.");
+        }
     }
 
     /**
@@ -195,7 +207,22 @@ public class Controller extends JPanel {
         addNewPerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Add Person");
-                
+                final JDialog popup = createPopup("Add Person");
+                //Action listener for adding a person button
+                submitButton.addActionListener(new ActionListener() {
+    				@Override
+    				public void actionPerformed(ActionEvent e) {
+    					Object[] temp = new Object[columnNames.length];
+    					for (int i = 0; i < columnNames.length; i++) {
+    						temp[i] = editFields[i].getText();
+    					}
+    					//Add data from text fields to table
+    					model.addRow(temp); 
+    					popup.setVisible(false);
+    					popup.dispose();
+    				}
+            		
+            	});
             } 
         });
 
@@ -256,17 +283,19 @@ public class Controller extends JPanel {
 				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 				int returnVal = fc.showOpenDialog(fc);
 
+				//Check if file is open
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fc.getSelectedFile();
 					try {
 						FileWriter excel = new FileWriter(file);
 
+						//Export the column names to the file
 						for (int i = 0; i < model.getColumnCount(); i++) {
 							excel.write(model.getColumnName(i) + ",");
 						}
-
 						excel.write("\n");
 
+						//Export the rest of the table to the file
 						for (int i = 0; i < model.getRowCount(); i++) {
 							for (int j = 0; j < model.getColumnCount(); j++) {
 								if (model.getValueAt(i, j) != null) {
@@ -316,9 +345,7 @@ public class Controller extends JPanel {
      * @param   mainPanel   the main panel of the open page
      */
     public static void setTablePanel(JPanel mainPanel) {
-        
-        String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
-
+       
         //TODO fix this function so that the table does not take up the whole screen and shows data
         model = new DefaultTableModel(columnNames, 0);
 
@@ -335,7 +362,6 @@ public class Controller extends JPanel {
     public static void setGraphicPanel(JPanel mainPanel){
 
         JPanel graphicPanel = new JPanel();
-
 
         JLabel graphicLabel = new JLabel("graphic view here");
 
@@ -355,6 +381,7 @@ public class Controller extends JPanel {
     	JPanel mainPanel = new JPanel();
     	mainPanel.setLayout(layout);
     	
+    	//Create the popup to receive the data
     	final JFrame popup = new JFrame("Create Rush Class");
     	final JTextField year = new JTextField();
     	JLabel yearLabel = new JLabel("Year:");
@@ -401,6 +428,45 @@ public class Controller extends JPanel {
         popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
     
+    public static JDialog createPopup(String title) {
+    	final JDialog popup = new JDialog(mainFrame, title);
+    	GridLayout layout = new GridLayout(0,2);
+    	JPanel mainPanel = new JPanel();
+    	mainPanel.setLayout(layout);
+    	
+    	editFields = new JTextField[columnNames.length];
+    	editLabels = new JLabel[columnNames.length];
+        
+        for (int i = 0; i < columnNames.length; i++) {
+        	editFields[i] = new JTextField();
+        	editFields[i].setBounds(20, 220, 100, 25);
+        	editLabels[i] = new JLabel(columnNames[i] + ":");
+        	mainPanel.add(editLabels[i]);
+        	mainPanel.add(editFields[i]);
+        }
+      
+        popup.add(mainPanel, BorderLayout.NORTH);
+        submitButton = new JButton("Submit");
+        JButton cancelButton = new JButton("Cancel");
+        
+        cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				popup.setVisible(false);
+				popup.dispose();
+			}
+    		
+    	});
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(submitButton);
+        buttonPanel.add(cancelButton);
+        popup.add(buttonPanel, BorderLayout.PAGE_END);
+        popup.setLocationRelativeTo(null);
+        popup.pack();
+        popup.setVisible(true);
+        return popup;
+    }
 
 
     /**
