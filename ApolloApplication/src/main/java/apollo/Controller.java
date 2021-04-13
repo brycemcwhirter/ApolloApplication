@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -39,6 +40,7 @@ public class Controller extends JPanel {
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
     static RushClass mainRushClass;
+    static JTable table;
 
     /**
      * 
@@ -146,7 +148,7 @@ public class Controller extends JPanel {
          * Main Panel Settings
          */
         
-        mainPanel.setLayout(new GridLayout(2,1));
+        mainPanel.setLayout(new BorderLayout());
        
         /**
          * Opening Main Panel to Full Screen 
@@ -242,6 +244,48 @@ public class Controller extends JPanel {
                 
             }
         });
+        
+        /** Export to File
+         * 
+         * This button will export the table to a file
+         */
+        JButton exportToFile = new JButton("Export");
+        exportToFile.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+				JFileChooser fc = new JFileChooser();
+				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
+				int returnVal = fc.showOpenDialog(fc);
+
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					try {
+						FileWriter excel = new FileWriter(file);
+
+						for (int i = 0; i < model.getColumnCount(); i++) {
+							excel.write(model.getColumnName(i) + ",");
+						}
+
+						excel.write("\n");
+
+						for (int i = 0; i < model.getRowCount(); i++) {
+							for (int j = 0; j < model.getColumnCount(); j++) {
+								if (model.getValueAt(i, j) != null) {
+									excel.write(model.getValueAt(i, j).toString() + ",");
+								} else {
+									excel.write(",");
+								}
+							}
+							excel.write("\n");
+						}
+
+						excel.close();
+
+					} catch (IOException er) {
+						System.out.println(er);
+					}
+				}
+            }
+        });
 
         
 
@@ -250,15 +294,16 @@ public class Controller extends JPanel {
         topButtonPanel.add(removePerson);
         topButtonPanel.add(listView);
         topButtonPanel.add(graphicView);
+        topButtonPanel.add(exportToFile);
 
 
         // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        topButtonPanel.setSize(screenSize.width, 500);
+        topButtonPanel.setSize(screenSize.width, 1000);
         topButtonPanel.setVisible(true);
 
         // Adding button panel to main panel 
-        mainPanel.add(topButtonPanel);
+        mainPanel.add(topButtonPanel, BorderLayout.CENTER);
     }
 
     
@@ -277,11 +322,11 @@ public class Controller extends JPanel {
         //TODO fix this function so that the table does not take up the whole screen and shows data
         model = new DefaultTableModel(columnNames, 0);
 
-        JTable table = new JTable(model);
-        table.setPreferredScrollableViewportSize(new Dimension(750, 200));
+        table = new JTable(model);
+        table.setPreferredScrollableViewportSize(new Dimension(750, 400));
         table.setFillsViewportHeight(true);
 
-        mainPanel.add(new JScrollPane(table));
+        mainPanel.add(new JScrollPane(table), BorderLayout.PAGE_END);
 
     }
 
@@ -294,10 +339,8 @@ public class Controller extends JPanel {
 
         JLabel graphicLabel = new JLabel("graphic view here");
 
-        graphicPanel.add(graphicLabel);
+        graphicPanel.add(graphicLabel, BorderLayout.LINE_START);
         mainPanel.add(graphicPanel);
-
-
     }
     
     /** 
