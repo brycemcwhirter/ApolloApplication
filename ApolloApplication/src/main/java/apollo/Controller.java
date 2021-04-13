@@ -177,6 +177,8 @@ public class Controller extends JPanel {
         JPanel topButtonPanel = new JPanel();
         //topButtonPanel.setLayout(new FlowLayout());
 
+
+
         /** Add New Person
          * 
          * This button is responsible for adding
@@ -189,6 +191,8 @@ public class Controller extends JPanel {
                 
             } 
         });
+
+        
 
         /** Remove Person
          * 
@@ -204,6 +208,7 @@ public class Controller extends JPanel {
         });
 
 
+
         /** List View
          * 
          * This button organizes the table into a list view
@@ -215,6 +220,7 @@ public class Controller extends JPanel {
                 
             } 
         });
+
 
 
         /** Graphic View
@@ -229,6 +235,7 @@ public class Controller extends JPanel {
             }
         });
 
+        
 
         // Adding Buttons to the button panel
         topButtonPanel.add(addNewPerson);
@@ -274,11 +281,11 @@ public class Controller extends JPanel {
     }
 
     
-/**
-* Main
-*
-* Calls open Dialogue and Begins the Application
-*/
+    /**
+    * Main
+    *
+    * Calls open Dialogue and Begins the Application
+    */
     public static void main(String[] args) {
         // Just Calling Open Page
         openDialogue();
