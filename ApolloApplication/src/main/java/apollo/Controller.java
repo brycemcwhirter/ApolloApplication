@@ -1,16 +1,19 @@
 package apollo;
 
-
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+
+import apollo.Objects.RushClass;
+import apollo.Enum.Semester;
+
 import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionEvent;
@@ -19,9 +22,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.System.Logger;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,6 +38,7 @@ public class Controller extends JPanel {
     static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
+    static RushClass mainRushClass;
 
     /**
      * 
@@ -74,6 +76,7 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
                 mainPage();
+                createRushClass();
             }
         });
 
@@ -109,6 +112,7 @@ public class Controller extends JPanel {
                 } else {
                     System.out.println("Open command cancelled by user.");
                 }
+                createRushClass();
             }
 
         });
@@ -294,6 +298,64 @@ public class Controller extends JPanel {
         mainPanel.add(graphicPanel);
 
 
+    }
+    
+    /** 
+     * createRushClass
+     * 
+     * Prompts the user to enter information for the rush class
+     */
+    public static void createRushClass() {
+    	mainRushClass = new RushClass();
+    	
+    	GridLayout layout = new GridLayout(0,2);
+    	JPanel mainPanel = new JPanel();
+    	mainPanel.setLayout(layout);
+    	
+    	final JFrame popup = new JFrame("Create Rush Class");
+    	final JTextField year = new JTextField();
+    	JLabel yearLabel = new JLabel("Year:");
+    	year.setBounds(20, 220, 100, 25);
+    	
+    	mainPanel.add(yearLabel);
+    	mainPanel.add(year);
+    	
+    	Semester[] semesters = {Semester.FALL, Semester.SPRING};
+    	mainRushClass.setS(Semester.FALL);
+    	final JComboBox<Semester> semesterList = new JComboBox<Semester>(semesters);
+    	semesterList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Semester input = (Semester) semesterList.getSelectedItem();
+                mainRushClass.setS(input);
+            }
+        });
+    	
+    	popup.add(mainPanel, BorderLayout.NORTH);
+    	popup.add(semesterList);
+    	popup.setVisible(true);
+        popup.setLocationRelativeTo(null);
+        popup.setSize(300,120);
+        
+        JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainRushClass.setYear(Integer.parseInt(year.getText()));
+                JLabel semesterLabel = new JLabel("Semester: " + mainRushClass.getS().toString());
+                JLabel yearLabel = new JLabel("Year: " + year.getText());
+                JPanel top = new JPanel();
+                top.add(semesterLabel);
+                top.add(yearLabel);
+                mainFrame.add(top, BorderLayout.PAGE_START);
+                SwingUtilities.updateComponentTreeUI(mainFrame);
+                
+                popup.setVisible(false);
+                popup.dispose();
+            }
+        });
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(submitButton);
+        popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
     
 
