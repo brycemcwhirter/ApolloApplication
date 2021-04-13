@@ -136,21 +136,31 @@ public class Controller extends JPanel {
      */
     public static void mainPage() {
 
-        
+        /**
+         * Main Panel Settings
+         */
         JFrame mainFrame = new JFrame();
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(2,1));
        
+        /**
+         * Opening Main Panel to Full Screen 
+         */
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setSize(screenSize.width, screenSize.height);
 
+        /**
+         * Adding Panels to Main Panel
+         */
         setTopButtonPanel(mainPanel);
         setTablePanel(mainPanel);
 
+        /**
+         * Adding Panels to Main Frame
+         */
         mainFrame.add(mainPanel);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
-
     }
 
     
