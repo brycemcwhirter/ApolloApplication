@@ -19,7 +19,7 @@ public class PNM {
     List<Event> eventList;
 
     public PNM(String name, String hometown, String email, String major, boolean legacy, int age, String phoneNumber,
-            Tier t, List<String> vouchList, List<Event> eventList) {
+            Tier temp) {
         this.name = name;
         this.hometown = hometown;
         this.email = email;
@@ -27,9 +27,7 @@ public class PNM {
         this.legacy = legacy;
         this.age = age;
         this.phoneNumber = phoneNumber;
-        this.t = t;
-        this.vouchList = vouchList;
-        this.eventList = eventList;
+        this.t = temp;
     }
 
     public String getName() {
