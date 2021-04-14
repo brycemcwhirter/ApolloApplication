@@ -1,4 +1,4 @@
-package tester;
+package apollo.tester;
 
 import java.io.FileNotFoundException;
 
