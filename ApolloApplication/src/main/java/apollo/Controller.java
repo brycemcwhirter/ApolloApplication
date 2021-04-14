@@ -41,7 +41,12 @@ import java.awt.Toolkit;
  * Controller
  */
 public class Controller extends JPanel {
-    static DefaultTableModel model;
+	public enum viewState {
+		LIST,
+		GALLERY;
+	}
+	
+	static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
     static RushClass mainRushClass;
@@ -52,7 +57,7 @@ public class Controller extends JPanel {
 	static JButton submitButton;
 	static JScrollPane pane;
 	static JPanel graphicPanel;
-
+	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
 
     /**
@@ -281,11 +286,14 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
             	//Remove everything, then add back button panel and table
                 System.out.println("List View");
-                Controller.mainPanel.removeAll();
-            	setTopButtonPanel(Controller.mainPanel);
-            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
-            	mainFrame.setSize(1000,350);
-                mainFrame.setLocationRelativeTo(null);
+                if (!listviewMode) {
+	                Controller.mainPanel.removeAll();
+	            	setTopButtonPanel(Controller.mainPanel);
+	            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
+	            	mainFrame.setSize(1000,350);
+	                mainFrame.setLocationRelativeTo(null);
+	                listviewMode = true;
+                }
             } 
         });
 
@@ -301,7 +309,10 @@ public class Controller extends JPanel {
                 //TODO Modify graphic view button to show graphic view of PNM's
                 System.out.println("Graphic View");
               //Remove everything, then add back button panel and gallery view
-                Controller.setGraphicPanel(Controller.mainPanel);
+                if (listviewMode) {
+                	Controller.setGraphicPanel(Controller.mainPanel);
+                	listviewMode = false;
+                }
             }
         });
         
