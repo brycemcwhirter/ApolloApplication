@@ -27,5 +27,21 @@ public class RushClass {
 	public void setMembers(List<PNM> members) {
 		this.members = members;
 	}
+	
+	public void addMember(PNM pnm) {
+		this.members.add(pnm);
+	}
+	
+	public void removePerson(String name) {
+		Boolean found = false;
+		int index = 0;
+		while (!found && index != members.size()) {
+			if (name == members.get(index).getName()) {
+				found = true;
+			}
+			index++;
+		}
+		members.remove(index);
+	}
 
 }

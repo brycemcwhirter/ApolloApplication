@@ -2,6 +2,7 @@ package apollo;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -9,8 +10,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
 import apollo.Enum.Semester;
+import apollo.Enum.Tier;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,6 +27,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -83,7 +88,8 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
                 mainPage();
-                createRushClass();
+                List<PNM> members = new ArrayList<PNM>();
+                createRushClass(members);
             }
         });
 
@@ -93,8 +99,8 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Import Database");
                 mainPage();
-                importFile();
-                createRushClass();
+                List<PNM> members = importFile();
+                createRushClass(members);
             }
 
         });
@@ -117,10 +123,11 @@ public class Controller extends JPanel {
 
     }
     
-    public static void importFile() {
+    public static List<PNM> importFile() {
     	JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
         int returnVal = fc.showOpenDialog(fc);
+        List<PNM> members = new ArrayList<PNM>();
 
         //Check if file is opened
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -138,6 +145,9 @@ public class Controller extends JPanel {
                     //Add person to the table
                     model.addRow(new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6],
                             temp[7] });
+                    PNM pnm = new PNM(temp[0], temp[1], temp[2], temp[3], Boolean.parseBoolean(temp[4]), Integer.parseInt(temp[5]), 
+                    		temp[6], Tier.valueOf(temp[7]));
+                    members.add(pnm);
                 }
             } catch (IOException e1) {
                 e1.printStackTrace();
@@ -147,6 +157,7 @@ public class Controller extends JPanel {
         } else {
             System.out.println("Open command cancelled by user.");
         }
+        return members;
     }
 
     /**
@@ -212,10 +223,13 @@ public class Controller extends JPanel {
                 submitButton.addActionListener(new ActionListener() {
     				@Override
     				public void actionPerformed(ActionEvent e) {
-    					Object[] temp = new Object[columnNames.length];
+    					String[] temp = new String[columnNames.length];
     					for (int i = 0; i < columnNames.length; i++) {
     						temp[i] = editFields[i].getText();
     					}
+    					PNM pnm = new PNM(temp[0], temp[1], temp[2], temp[3], Boolean.parseBoolean(temp[4]), Integer.parseInt(temp[5]), 
+                        		temp[6], Tier.valueOf(temp[7]));
+    					mainRushClass.addMember(pnm);
     					//Add data from text fields to table
     					model.addRow(temp); 
     					popup.setVisible(false);
@@ -231,13 +245,27 @@ public class Controller extends JPanel {
         /** Remove Person
          * 
          * This button is responsible for removing
-         * an old person to the list
+         * a person from the list
          */
         JButton removePerson = new JButton("Remove Person");
         removePerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Remove Person");
-                
+                if (table.getSelectedRow() != -1) {
+                	Object[] options = {"Yes", "No"};
+            		int n = JOptionPane.showOptionDialog(mainFrame,
+            			    "Are you sure you want to remove " + (model.getValueAt(table.getSelectedRow(), 0)) + "?",
+            			    "Delete Row?",
+            			    JOptionPane.YES_NO_OPTION,
+            			    JOptionPane.QUESTION_MESSAGE,
+            			    null,
+            			    options,
+            			    options[0]);
+    	        	if (n == 0) {
+	                	mainRushClass.removePerson((String) model.getValueAt(table.getSelectedRow(), 0));
+	                	model.removeRow(table.getSelectedRow());
+    	        	}
+                }
             }
         });
 
@@ -374,7 +402,7 @@ public class Controller extends JPanel {
      * 
      * Prompts the user to enter information for the rush class
      */
-    public static void createRushClass() {
+    public static void createRushClass(final List<PNM> list) {
     	mainRushClass = new RushClass();
     	
     	GridLayout layout = new GridLayout(0,2);
@@ -410,6 +438,7 @@ public class Controller extends JPanel {
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainRushClass.setYear(Integer.parseInt(year.getText()));
+                mainRushClass.setMembers(list);
                 JLabel semesterLabel = new JLabel("Semester: " + mainRushClass.getS().toString());
                 JLabel yearLabel = new JLabel("Year: " + year.getText());
                 JPanel top = new JPanel();
