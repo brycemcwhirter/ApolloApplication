@@ -9,14 +9,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-<<<<<<< HEAD
-import apollo.Objects.RushClass;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-=======
 import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
 import apollo.Enum.Semester;
@@ -26,7 +18,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
->>>>>>> 2020ff3a07f4380f047a8a1225ad65b37f5ad8fc
 import javax.swing.JFileChooser;
 
 import java.awt.event.ActionEvent;
@@ -43,12 +34,8 @@ import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-<<<<<<< HEAD
 import java.awt.Toolkit;
 
-=======
-import java.awt.GridLayout;
->>>>>>> 625734ce387fbe79546cdd42477e4efea5922777
 
 /**
  * Controller
@@ -103,17 +90,9 @@ public class Controller extends JPanel {
         newDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("New Database");
-<<<<<<< HEAD
                 mainPage();
-<<<<<<< HEAD
-=======
-                createTable();
-                createRushClass();
->>>>>>> 625734ce387fbe79546cdd42477e4efea5922777
-=======
                 List<PNM> members = new ArrayList<PNM>();
                 createRushClass(members);
->>>>>>> 2020ff3a07f4380f047a8a1225ad65b37f5ad8fc
             }
         });
 
@@ -123,45 +102,12 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Import Database");
                 mainPage();
-<<<<<<< HEAD
-                JFileChooser fc = new JFileChooser();
-                fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-                int returnVal = fc.showOpenDialog(fc);
-
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fc.getSelectedFile();
-
-                    BufferedReader reader = null;
-                    try {
-                        reader = new BufferedReader(new FileReader(file));
-
-                        String line = null;
-                        while ((line = reader.readLine()) != null) {
-                            String temp[] = line.split(",");
-
-                            model.addRow(new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6],
-                                    temp[7] });
-                        }
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-
-                    System.out.println("Opening: " + file.getName() + ".");
-                } else {
-                    System.out.println("Open command cancelled by user.");
-                }
-                createRushClass();
-=======
                 List<PNM> members = importFile();
                 createRushClass(members);
->>>>>>> 2020ff3a07f4380f047a8a1225ad65b37f5ad8fc
             }
 
         });
-<<<<<<< HEAD
         
-=======
->>>>>>> 625734ce387fbe79546cdd42477e4efea5922777
 
         panel.add(label);
         panel.add(newDatabase);
@@ -217,7 +163,6 @@ public class Controller extends JPanel {
         return members;
     }
 
-<<<<<<< HEAD
     /**
      * mainPage
      * 
@@ -442,20 +387,8 @@ public class Controller extends JPanel {
      * panel to the main frame
      * @param   mainPanel   the main panel of the open page
      */
-<<<<<<< HEAD
-    public static void setTablePanel(JFrame mainFrame) {
-        
-=======
-    public static void createTable() {
-        JFrame tableFrame = new JFrame("Database");
-        tableFrame.setSize(750, 300);
->>>>>>> 625734ce387fbe79546cdd42477e4efea5922777
-        String[] columnNames = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
-
-=======
     public static void setTablePanel(JPanel mainPanel) {
        
->>>>>>> 2020ff3a07f4380f047a8a1225ad65b37f5ad8fc
         //TODO fix this function so that the table does not take up the whole screen and shows data
         model = new DefaultTableModel(columnNames, 0);
 
@@ -465,85 +398,7 @@ public class Controller extends JPanel {
         
         pane = new JScrollPane(table);
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-        tablePanel.add(new JScrollPane(table));
-        tablePanel.setVisible(true);
-
-        mainFrame.getContentPane().add(tablePanel);  
-=======
-        tableFrame.add(new JScrollPane(table), BorderLayout.PAGE_START);
-        
-        JButton addPerson = new JButton("Add Person");
-        addPerson.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Add Person");
-            }
-        });
-        
-        JButton removePerson = new JButton("Remove Person");
-        removePerson.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Remove Person");
-            }
-        });
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(addPerson);
-        buttonPanel.add(removePerson);
-        tableFrame.add(buttonPanel, BorderLayout.PAGE_END);
-        tableFrame.setVisible(true);
-        tableFrame.setLocationRelativeTo(null);
->>>>>>> 625734ce387fbe79546cdd42477e4efea5922777
-    }
-    
-    public static void createRushClass() {
-    	final RushClass mainRushClass = new RushClass();
-    	
-    	GridLayout layout = new GridLayout(0,2);
-    	JPanel mainPanel = new JPanel();
-    	mainPanel.setLayout(layout);
-    	
-    	final JFrame popup = new JFrame("Create Rush Class");
-    	final JTextField year = new JTextField();
-    	JLabel yearLabel = new JLabel("Year:");
-    	year.setBounds(20, 220, 100, 25);
-    	
-    	mainPanel.add(yearLabel);
-    	mainPanel.add(year);
-    	
-    	String[] semesters = {"FALL", "SPRING"};
-    	final JComboBox<String> semesterList = new JComboBox<String>(semesters);
-    	semesterList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String input = (String) semesterList.getSelectedItem();
-                System.out.println(input);
-                //mainRushClass.setS(FALL);
-            }
-        });
-    	
-    	popup.add(mainPanel, BorderLayout.NORTH);
-    	popup.add(semesterList);
-    	popup.setVisible(true);
-        popup.setLocationRelativeTo(null);
-        popup.setSize(300,120);
-        
-        JButton submitButton = new JButton("Submit");
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Submit");
-                mainRushClass.setYear(Integer.parseInt(year.getText()));
-                
-                popup.setVisible(false);
-                popup.dispose();
-            }
-        });
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(submitButton);
-        popup.add(buttonPanel, BorderLayout.PAGE_END);
-=======
         mainPanel.add(pane, BorderLayout.PAGE_END);
->>>>>>> 2020ff3a07f4380f047a8a1225ad65b37f5ad8fc
     }
 
 
