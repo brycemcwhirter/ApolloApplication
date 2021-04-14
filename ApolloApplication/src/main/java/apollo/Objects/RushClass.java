@@ -41,7 +41,9 @@ public class RushClass {
 			}
 			index++;
 		}
-		members.remove(index);
+		if (found) {
+			members.remove(index);
+		}
 	}
 
 }

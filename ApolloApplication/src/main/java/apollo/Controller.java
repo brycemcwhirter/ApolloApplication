@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import apollo.Objects.PNM;
@@ -15,6 +14,7 @@ import apollo.Objects.RushClass;
 import apollo.Enum.Semester;
 import apollo.Enum.Tier;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -41,7 +41,6 @@ import java.awt.Toolkit;
  * Controller
  */
 public class Controller extends JPanel {
-
     static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
@@ -51,10 +50,9 @@ public class Controller extends JPanel {
 	private static JLabel[] editLabels;
 	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 	static JButton submitButton;
+	static JScrollPane pane;
+	static JPanel graphicPanel;
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
 
     /**
@@ -176,8 +174,8 @@ public class Controller extends JPanel {
         /**
          * Opening Main Panel to Full Screen 
          */
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        mainFrame.setSize(screenSize.width, screenSize.height);
+        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //mainFrame.setSize(screenSize.width, screenSize.height);
 
         /**
          * Adding Panels to Main Panel
@@ -189,6 +187,7 @@ public class Controller extends JPanel {
          * Adding Panels to Main Frame
          */
         mainFrame.add(mainPanel);
+        mainFrame.setSize(1000,350);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
     }
@@ -251,6 +250,7 @@ public class Controller extends JPanel {
         removePerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Remove Person");
+                //Check to make sure that a row is selected
                 if (table.getSelectedRow() != -1) {
                 	Object[] options = {"Yes", "No"};
             		int n = JOptionPane.showOptionDialog(mainFrame,
@@ -262,6 +262,7 @@ public class Controller extends JPanel {
             			    options,
             			    options[0]);
     	        	if (n == 0) {
+    	        		//Remove the person from the table and the rush class
 	                	mainRushClass.removePerson((String) model.getValueAt(table.getSelectedRow(), 0));
 	                	model.removeRow(table.getSelectedRow());
     	        	}
@@ -278,8 +279,13 @@ public class Controller extends JPanel {
         JButton listView = new JButton("List View");
         listView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	//Remove everything, then add back button panel and table
                 System.out.println("List View");
-                
+                Controller.mainPanel.removeAll();
+            	setTopButtonPanel(Controller.mainPanel);
+            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
+            	mainFrame.setSize(1000,350);
+                mainFrame.setLocationRelativeTo(null);
             } 
         });
 
@@ -294,9 +300,8 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //TODO Modify graphic view button to show graphic view of PNM's
                 System.out.println("Graphic View");
+              //Remove everything, then add back button panel and gallery view
                 Controller.setGraphicPanel(Controller.mainPanel);
-                
-                
             }
         });
         
@@ -334,7 +339,6 @@ public class Controller extends JPanel {
 							}
 							excel.write("\n");
 						}
-
 						excel.close();
 
 					} catch (IOException er) {
@@ -368,7 +372,7 @@ public class Controller extends JPanel {
     /** 
      * setTablePanel
      * 
-     * Adds the Table to a Tabel Panel which then adds that
+     * Adds the Table to a Table Panel which then adds that
      * panel to the main frame
      * @param   mainPanel   the main panel of the open page
      */
@@ -378,23 +382,49 @@ public class Controller extends JPanel {
         model = new DefaultTableModel(columnNames, 0);
 
         table = new JTable(model);
-        table.setPreferredScrollableViewportSize(new Dimension(750, 400));
+        table.setPreferredScrollableViewportSize(new Dimension(400, 200));
         table.setFillsViewportHeight(true);
+        
+        pane = new JScrollPane(table);
 
-        mainPanel.add(new JScrollPane(table), BorderLayout.PAGE_END);
-
+        mainPanel.add(pane, BorderLayout.PAGE_END);
     }
 
 
     //TODO Modify graphic panel to show graphics
-    public static void setGraphicPanel(JPanel mainPanel){
-
-        JPanel graphicPanel = new JPanel();
-
-        JLabel graphicLabel = new JLabel("graphic view here");
-
-        graphicPanel.add(graphicLabel, BorderLayout.LINE_START);
-        mainPanel.add(graphicPanel);
+    public static  void setGraphicPanel(JPanel mainPanel) {
+    	mainPanel.removeAll();
+    	setTopButtonPanel(mainPanel);
+        
+    	//Remove everything, then add back button panel and gallery view
+        List<PNM> test = mainRushClass.getMembers();
+        GridLayout lay = new GridLayout(3,(test.size()/2)+1);
+        graphicPanel = new JPanel();
+        graphicPanel.setLayout(lay);
+        mainPanel.add(graphicPanel, BorderLayout.PAGE_END);
+      //For each person, create a new panel with their information and add to grid
+        for (int i = 0; i < test.size(); i++) {
+        	JPanel p = new JPanel();
+        	GridLayout lay2 = new GridLayout(3,1);
+        	p.setLayout(lay2);
+        	JLabel text = new JLabel();
+        	text.setText(test.get(i).getName());
+        	JLabel text2 = new JLabel();
+        	text2.setText(test.get(i).getMajor());
+        	p.add(text);
+        	p.add(text2);
+        	JButton bt = new JButton("More");
+        	p.add(bt);
+        	p.setSize(new Dimension(30, 100));
+        	p.setBorder(BorderFactory.createLineBorder(Color.black));
+        	graphicPanel.add(p);
+        }
+        if (test.size() < 2) {
+        	mainFrame.setSize(1000,200);
+        } else {
+        	mainFrame.setSize(1000,test.size()/2 * 100);
+        }
+        mainFrame.setLocationRelativeTo(null);
     }
     
     /** 
@@ -418,6 +448,7 @@ public class Controller extends JPanel {
     	mainPanel.add(yearLabel);
     	mainPanel.add(year);
     	
+    	//Create a JComboBox to select the semester
     	Semester[] semesters = {Semester.FALL, Semester.SPRING};
     	mainRushClass.setS(Semester.FALL);
     	final JComboBox<Semester> semesterList = new JComboBox<Semester>(semesters);
@@ -434,6 +465,7 @@ public class Controller extends JPanel {
         popup.setLocationRelativeTo(null);
         popup.setSize(300,120);
         
+        //Once submitted, assign the correct values to the rush class
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -445,13 +477,13 @@ public class Controller extends JPanel {
                 top.add(semesterLabel);
                 top.add(yearLabel);
                 mainFrame.add(top, BorderLayout.PAGE_START);
-                SwingUtilities.updateComponentTreeUI(mainFrame);
+                mainFrame.pack();
+                mainFrame.setSize(1000,350);
                 
                 popup.setVisible(false);
                 popup.dispose();
             }
         });
-        
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(submitButton);
         popup.add(buttonPanel, BorderLayout.PAGE_END);
@@ -466,6 +498,7 @@ public class Controller extends JPanel {
     	editFields = new JTextField[columnNames.length];
     	editLabels = new JLabel[columnNames.length];
         
+    	//Create the correct amount of edit fields and add them to the panel
         for (int i = 0; i < columnNames.length; i++) {
         	editFields[i] = new JTextField();
         	editFields[i].setBounds(20, 220, 100, 25);
