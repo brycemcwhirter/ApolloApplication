@@ -14,7 +14,11 @@ import apollo.Objects.RushClass;
 import apollo.Enum.Semester;
 import apollo.Enum.Tier;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -22,6 +26,7 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -64,13 +69,14 @@ public class Controller extends JPanel {
      * openDialogue
      * 
      * Sets up the Open Sequence for the Apollo Application
+     * @throws IOException 
      * 
      */
-    public static void openDialogue() {
+    public static void openDialogue() throws IOException {
 
         // Created New JFrame
         final JFrame frame = new JFrame("Apollo");
-        frame.setSize(230, 250);
+        frame.setSize(300, 300);
 
         // Created New JPanel
         JPanel panel = new JPanel();
@@ -78,6 +84,10 @@ public class Controller extends JPanel {
 
         // Added a New JLabel. Don't know if this is necesary.
         JLabel label = new JLabel("Apollo");
+        BufferedImage logo = ImageIO.read(new File("ApolloLogo.png"));
+        JLabel img = new JLabel(new ImageIcon(logo));
+        img.setPreferredSize(new Dimension(200,150));
+        
         label.setFont(new Font("Edwardian Script ITC", Font.PLAIN, 45));
         label.setForeground(new Color(254, 209, 65));
         label.setBackground(Color.decode("#00A3E0"));
@@ -110,6 +120,7 @@ public class Controller extends JPanel {
         
 
         panel.add(label);
+        panel.add(img);
         panel.add(newDatabase);
         panel.add(importDatabase);
         panel.setBackground(new Color(0, 163, 224));
@@ -546,8 +557,9 @@ public class Controller extends JPanel {
     * Main
     *
     * Calls open Dialogue and Begins the Application
+     * @throws IOException 
     */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // Just Calling Open Page
         openDialogue();
     }
