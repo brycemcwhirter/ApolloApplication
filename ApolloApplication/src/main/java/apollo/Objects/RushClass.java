@@ -27,7 +27,6 @@ public class RushClass {
 	public void setMembers(List<PNM> members) {
 		this.members = members;
 	}
-	
 	public void addMember(PNM pnm) {
 		this.members.add(pnm);
 	}
