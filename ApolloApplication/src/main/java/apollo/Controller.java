@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import apollo.Objects.PNM;
@@ -16,8 +17,6 @@ import apollo.Enum.Tier;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -321,7 +320,11 @@ public class Controller extends JPanel {
                 System.out.println("Graphic View");
               //Remove everything, then add back button panel and gallery view
                 if (listviewMode) {
-                	Controller.setGraphicPanel(Controller.mainPanel);
+                	try {
+						Controller.setGraphicPanel(Controller.mainPanel);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
                 	listviewMode = false;
                 }
             }
@@ -369,6 +372,44 @@ public class Controller extends JPanel {
 				}
             }
         });
+        
+        JButton editTier = new JButton("Edit Tier");
+        editTier.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Edit Tier");
+                //Check to make sure that a row is selected
+                if (table.getSelectedRow() != -1) {
+                	final JFrame popup = new JFrame("Edit Tier");
+                	JLabel name = new JLabel("Editing " + (String) model.getValueAt(table.getSelectedRow(), 0) + "'s tier");
+                	name.setFont(new Font("Arial Hebrew", Font.PLAIN, 15));
+                	Tier[] tiers = {Tier.GRAY, Tier.GREEN, Tier.RED};
+                	final JComboBox<Tier> tierSelect = new JComboBox<Tier>(tiers);
+                	
+                	JButton submitButton = new JButton("Submit");
+                    submitButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                        	table.setValueAt(tierSelect.getSelectedItem(), table.getSelectedRow(), 7);
+                        	mainRushClass.editTier((String) model.getValueAt(table.getSelectedRow(), 0), 
+                        			(Tier) tierSelect.getSelectedItem());
+                            
+                            popup.setVisible(false);
+                            popup.dispose();
+                        }
+                    });
+                    name.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+                    popup.add(name, BorderLayout.PAGE_START);
+                    JPanel p = new JPanel();
+                    p.add(tierSelect);
+                    popup.add(p, BorderLayout.CENTER);
+                    JPanel p2 = new JPanel();
+                    p2.add(submitButton);
+                	popup.add(p2, BorderLayout.PAGE_END);
+                	popup.setVisible(true);
+                	popup.pack();
+                	popup.setLocationRelativeTo(null);
+                }
+            }
+        });
 
         
 
@@ -378,7 +419,7 @@ public class Controller extends JPanel {
         topButtonPanel.add(listView);
         topButtonPanel.add(graphicView);
         topButtonPanel.add(exportToFile);
-
+        topButtonPanel.add(editTier);
 
         // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -414,7 +455,7 @@ public class Controller extends JPanel {
 
 
     //TODO Modify graphic panel to show graphics
-    public static  void setGraphicPanel(JPanel mainPanel) {
+    public static  void setGraphicPanel(JPanel mainPanel) throws IOException {
     	mainPanel.removeAll();
     	setTopButtonPanel(mainPanel);
         
@@ -423,11 +464,12 @@ public class Controller extends JPanel {
         GridLayout lay = new GridLayout(3,(test.size()/2)+1);
         graphicPanel = new JPanel();
         graphicPanel.setLayout(lay);
-        mainPanel.add(graphicPanel, BorderLayout.PAGE_END);
-      //For each person, create a new panel with their information and add to grid
+        JScrollPane scroll = new JScrollPane(graphicPanel);
+        mainPanel.add(scroll, BorderLayout.PAGE_END);
+        //For each person, create a new panel with their information and add to grid
         for (int i = 0; i < test.size(); i++) {
         	JPanel p = new JPanel();
-        	GridLayout lay2 = new GridLayout(3,1);
+        	GridLayout lay2 = new GridLayout(4,1);
         	p.setLayout(lay2);
         	JLabel text = new JLabel();
         	text.setText(test.get(i).getName());
@@ -444,7 +486,7 @@ public class Controller extends JPanel {
         if (test.size() < 2) {
         	mainFrame.setSize(1000,200);
         } else {
-        	mainFrame.setSize(1000,test.size()/2 * 100);
+        	mainFrame.setSize(1000,test.size()/2 * 110);
         }
         mainFrame.setLocationRelativeTo(null);
     }
@@ -462,7 +504,7 @@ public class Controller extends JPanel {
     	mainPanel.setLayout(layout);
     	
     	//Create the popup to receive the data
-    	final JFrame popup = new JFrame("Create Rush Class");
+    	final JFrame popup = new JFrame("Rush Class");
     	final JTextField year = new JTextField();
     	JLabel yearLabel = new JLabel("Year:");
     	year.setBounds(20, 220, 100, 25);
@@ -485,7 +527,7 @@ public class Controller extends JPanel {
     	popup.add(semesterList);
     	popup.setVisible(true);
         popup.setLocationRelativeTo(null);
-        popup.setSize(300,120);
+        popup.setSize(250,120);
         
         //Once submitted, assign the correct values to the rush class
         JButton submitButton = new JButton("Submit");
