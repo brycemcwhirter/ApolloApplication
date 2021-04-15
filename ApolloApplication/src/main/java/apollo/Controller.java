@@ -46,11 +46,19 @@ import java.awt.Toolkit;
  * Controller
  */
 public class Controller extends JPanel {
+
+
+
+
 	public enum viewState {
 		LIST,
 		GALLERY;
 	}
 	
+
+
+
+
 	static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
@@ -64,6 +72,11 @@ public class Controller extends JPanel {
 	static JPanel graphicPanel;
 	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
+
+
+
+
+
 
     /**
      * openDialogue
@@ -137,6 +150,54 @@ public class Controller extends JPanel {
 
     }
     
+
+
+      /**
+     * mainPage
+     * 
+     * Opens up the main page and sets up panels
+     */
+    public static void mainPage() {
+
+        /**
+         * Main Panel Settings
+         */
+        
+        mainPanel.setLayout(new BorderLayout());
+       
+        /**
+         * Opening Main Panel to Full Screen 
+         */
+        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        //mainFrame.setSize(screenSize.width, screenSize.height);
+
+        /**
+         * Adding Panels to Main Panel
+         */
+        setTopButtonPanel(mainPanel);
+        setTablePanel(mainPanel);
+
+        /**
+         * Adding Panels to Main Frame
+         */
+        mainFrame.add(mainPanel);
+        mainFrame.setSize(1000,350);
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setVisible(true);
+    }
+
+
+
+
+
+
+
+
+
+    
+    /** 
+     * @return List<PNM>
+     */
     public static List<PNM> importFile() {
     	JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
@@ -174,39 +235,15 @@ public class Controller extends JPanel {
         return members;
     }
 
-    /**
-     * mainPage
-     * 
-     * Opens up the main page and sets up panels
-     */
-    public static void mainPage() {
 
-        /**
-         * Main Panel Settings
-         */
-        
-        mainPanel.setLayout(new BorderLayout());
-       
-        /**
-         * Opening Main Panel to Full Screen 
-         */
-        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        //mainFrame.setSize(screenSize.width, screenSize.height);
 
-        /**
-         * Adding Panels to Main Panel
-         */
-        setTopButtonPanel(mainPanel);
-        setTablePanel(mainPanel);
 
-        /**
-         * Adding Panels to Main Frame
-         */
-        mainFrame.add(mainPanel);
-        mainFrame.setSize(1000,350);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setVisible(true);
-    }
+
+
+
+
+  
+
 
     
     /** 
@@ -224,7 +261,7 @@ public class Controller extends JPanel {
 
 
 
-        /** Add New Person
+        /** Add New Person Button
          * 
          * This button is responsible for adding
          * a new person to the list
@@ -257,7 +294,7 @@ public class Controller extends JPanel {
 
         
 
-        /** Remove Person
+        /** Remove Person Button
          * 
          * This button is responsible for removing
          * a person from the list
@@ -288,7 +325,7 @@ public class Controller extends JPanel {
 
 
 
-        /** List View
+        /** List View Button
          * 
          * This button organizes the table into a list view
          */
@@ -310,7 +347,7 @@ public class Controller extends JPanel {
 
 
 
-        /** Graphic View
+        /** Graphic View Button
          * 
          * This button organizes the table into a graphic view
          */
@@ -326,8 +363,11 @@ public class Controller extends JPanel {
                 }
             }
         });
+
+
+
         
-        /** Export to File
+        /** Export to File Button
          * 
          * This button will export the table to a file
          */
@@ -391,6 +431,11 @@ public class Controller extends JPanel {
 
     
 
+
+
+
+
+
     /** 
      * setTablePanel
      * 
@@ -413,6 +458,22 @@ public class Controller extends JPanel {
     }
 
 
+
+
+
+
+
+
+
+    
+    /** 
+     * setGraphicPanel
+     * 
+     * 
+     * 
+     * 
+     * @param mainPanel
+     */
     //TODO Modify graphic panel to show graphics
     public static  void setGraphicPanel(JPanel mainPanel) {
     	mainPanel.removeAll();
@@ -449,10 +510,18 @@ public class Controller extends JPanel {
         mainFrame.setLocationRelativeTo(null);
     }
     
+
+
+
+
+
+
     /** 
      * createRushClass
      * 
      * Prompts the user to enter information for the rush class
+     * 
+     * @param list comments
      */
     public static void createRushClass(final List<PNM> list) {
     	mainRushClass = new RushClass();
@@ -510,7 +579,25 @@ public class Controller extends JPanel {
         buttonPanel.add(submitButton);
         popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
+
+
+
+
+
+
+
+
     
+    
+    /** 
+     * createPopup
+     * 
+     * This function creates a popup
+     * 
+     * 
+     * @param title
+     * @return JDialog
+     */
     public static JDialog createPopup(String title) {
     	final JDialog popup = new JDialog(mainFrame, title);
     	GridLayout layout = new GridLayout(0,2);
@@ -551,6 +638,12 @@ public class Controller extends JPanel {
         popup.setVisible(true);
         return popup;
     }
+
+
+
+
+
+
 
 
     /**
