@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -410,6 +411,13 @@ public class Controller extends JPanel {
                 }
             }
         });
+        
+        JButton eventButton = new JButton("Create Event");
+        eventButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                eventPopup();
+            }
+        });
 
         
 
@@ -420,6 +428,7 @@ public class Controller extends JPanel {
         topButtonPanel.add(graphicView);
         topButtonPanel.add(exportToFile);
         topButtonPanel.add(editTier);
+        topButtonPanel.add(eventButton);
 
         // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -592,6 +601,50 @@ public class Controller extends JPanel {
         popup.pack();
         popup.setVisible(true);
         return popup;
+    }
+    
+    public static void eventPopup() {
+    	final JFrame popup = new JFrame("New Event");
+    	JPanel mainP = new JPanel();
+    	mainP.setLayout(new GridLayout(0,2));
+    	
+    	JTextField fields[] = new JTextField[3];
+    	JLabel labels[] = new JLabel[3];
+    	labels[0] = new JLabel("Name: ");
+    	labels[1] = new JLabel("Date: ");
+    	labels[2] = new JLabel("Location: ");
+        
+        for (int i = 0; i < 3; i++) {
+        	fields[i] = new JTextField();
+        	fields[i].setBounds(20, 220, 100, 25);
+        	mainP.add(labels[i]);
+        	mainP.add(fields[i]);
+        }
+        popup.add(mainP, BorderLayout.PAGE_START);
+        
+        JButton submitButton = new JButton("Submit");
+        popup.add(submitButton, BorderLayout.PAGE_END);
+        
+        
+        submitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				popup.setVisible(false);
+				popup.dispose();
+			}
+    		
+    	});
+        
+        JPanel namePanel = new JPanel(new GridLayout(0,3));
+        JCheckBox names[] = new JCheckBox[mainRushClass.getMembers().size()];
+        for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
+        	names[i] = new JCheckBox(mainRushClass.getMembers().get(i).getName());
+        	namePanel.add(names[i]);
+        }
+        popup.add(namePanel, BorderLayout.CENTER);
+        
+        popup.setVisible(true);
+        popup.pack();
+        popup.setLocationRelativeTo(null);
     }
 
 
