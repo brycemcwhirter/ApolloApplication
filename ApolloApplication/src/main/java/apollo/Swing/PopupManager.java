@@ -213,6 +213,7 @@ public class PopupManager {
         panel.add(email);
         panel.add(photo);
         
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 	}
 	public static void tierPopup(final DefaultTableModel model, final JTable table, final RushClass mainRushClass) {
