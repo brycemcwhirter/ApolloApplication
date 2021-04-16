@@ -34,7 +34,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 
@@ -314,8 +313,8 @@ public class Controller extends JPanel {
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO Modify graphic view button to show graphic view of PNM's
-                System.out.println("Graphic View");
-              //Remove everything, then add back button panel and gallery view
+            	System.out.println("Graphic View");
+            	//Remove everything, then add back button panel and gallery view
                 if (listviewMode) {
                 	try {
 						PopupManager.setGraphicPanel(Controller.mainPanel, mainFrame, mainRushClass);
@@ -388,10 +387,7 @@ public class Controller extends JPanel {
             }
         });
 
-        
-
         // Adding Buttons to the button panel
-       
         topButtonPanel.add(addNewPerson);
         topButtonPanel.add(removePerson);
         topButtonPanel.add(listView);
@@ -420,7 +416,6 @@ public class Controller extends JPanel {
      */
     public static void setTablePanel(JPanel mainPanel) {
        
-        //TODO fix this function so that the table does not take up the whole screen and shows data
         model = new DefaultTableModel(columnNames, 0);
 
         table = new JTable(model);
@@ -431,18 +426,7 @@ public class Controller extends JPanel {
 
         mainPanel.add(pane, BorderLayout.PAGE_END);
     }
-
-
-    //TODO Modify graphic panel to show graphics
-    
-    
-    /** 
-     * createRushClass
-     * 
-     * Prompts the user to enter information for the rush class
-     */
-    
-    
+  
     public static JDialog createPopup(String title) {
     	final JDialog popup = new JDialog(mainFrame, title);
     	GridLayout layout = new GridLayout(0,2);
