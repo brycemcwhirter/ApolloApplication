@@ -6,10 +6,14 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -135,12 +139,12 @@ public class PopupManager {
         popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
 	
-	public static  void setGraphicPanel(JPanel mainPanel, JFrame mainFrame, RushClass mainRushClass) throws IOException {
+	public static void setGraphicPanel(JPanel mainPanel, JFrame mainFrame, RushClass mainRushClass) throws IOException {
     	mainPanel.removeAll();
     	Controller.setTopButtonPanel(mainPanel);
         
     	//Remove everything, then add back button panel and gallery view
-        List<PNM> test = mainRushClass.getMembers();
+        final List<PNM> test = mainRushClass.getMembers();
         GridLayout lay = new GridLayout(3,(test.size()/2)+1);
         lay.setHgap(15);
         lay.setVgap(15);
@@ -160,6 +164,17 @@ public class PopupManager {
         	p.add(text);
         	p.add(text2);
         	JButton bt = new JButton("More");
+        	final PNM pnm = test.get(i);
+        	bt.addActionListener(new ActionListener() {
+        		public void actionPerformed(ActionEvent e) {
+        			try {
+						galleryPopup(pnm);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+        		}
+            });
         	p.add(bt);
         	p.setSize(new Dimension(30, 100));
         	p.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
@@ -170,6 +185,31 @@ public class PopupManager {
         mainFrame.setLocationRelativeTo(null);
     }
 	
+	public static void galleryPopup(PNM pnm) throws IOException {
+		JFrame frame = new JFrame(pnm.getName());
+		frame.setSize(250, 300);
+		
+		String imgName = new String("Photos/" + pnm.getName());
+		imgName = imgName.concat(".png");
+		BufferedImage img = ImageIO.read(new File(imgName));
+		JPanel panel = new JPanel();
+        frame.add(panel);
+        
+        JLabel name = new JLabel("Name: " + pnm.getName());
+        JLabel age = new JLabel("Age: " + Integer.toString(pnm.getAge()));
+        JLabel phone = new JLabel("Phone #: " + pnm.getPhoneNumber());
+        JLabel email = new JLabel("Email: " + pnm.getEmail());
+        JLabel photo = new JLabel(new ImageIcon(img));
+        photo.setPreferredSize(new Dimension(200,200));
+        
+        panel.add(name);
+        panel.add(age);
+        panel.add(phone);
+        panel.add(email);
+        panel.add(photo);
+        
+        frame.setVisible(true);
+	}
 	public static void tierPopup(final DefaultTableModel model, final JTable table, final RushClass mainRushClass) {
 		final JFrame popup = new JFrame("Edit Tier");
     	JLabel name = new JLabel("Editing " + (String) model.getValueAt(table.getSelectedRow(), 0) + "'s tier");

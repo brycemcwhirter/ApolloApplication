@@ -127,7 +127,7 @@ public class Controller extends JPanel {
         // every time
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setBackground(new Color(0, 163, 224));
+        //frame.getContentPane().setBackground(new Color(0, 163, 224));
         // frame.pack();
         frame.setVisible(true);
 
