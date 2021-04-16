@@ -61,7 +61,6 @@ public class Controller extends JPanel {
 	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 	static JButton submitButton;
 	static JScrollPane pane;
-	static JPanel graphicPanel;
 	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
 
@@ -310,11 +309,11 @@ public class Controller extends JPanel {
 
 
 
-        /** Graphic View
+        /** Gallery View
          * 
-         * This button organizes the table into a graphic view
+         * This button organizes the table into a gallery view
          */
-        JButton graphicView = new JButton("Graphic View");
+        JButton graphicView = new JButton("Gallery View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO Modify graphic view button to show graphic view of PNM's
@@ -471,7 +470,9 @@ public class Controller extends JPanel {
     	//Remove everything, then add back button panel and gallery view
         List<PNM> test = mainRushClass.getMembers();
         GridLayout lay = new GridLayout(3,(test.size()/2)+1);
-        graphicPanel = new JPanel();
+        lay.setHgap(15);
+        lay.setVgap(15);
+        JPanel graphicPanel = new JPanel();
         graphicPanel.setLayout(lay);
         JScrollPane scroll = new JScrollPane(graphicPanel);
         mainPanel.add(scroll, BorderLayout.PAGE_END);
@@ -492,11 +493,8 @@ public class Controller extends JPanel {
         	p.setBorder(BorderFactory.createLineBorder(Color.black));
         	graphicPanel.add(p);
         }
-        if (test.size() < 2) {
-        	mainFrame.setSize(1000,200);
-        } else {
-        	mainFrame.setSize(1000,test.size()/2 * 110);
-        }
+        
+        mainFrame.pack();
         mainFrame.setLocationRelativeTo(null);
     }
     
