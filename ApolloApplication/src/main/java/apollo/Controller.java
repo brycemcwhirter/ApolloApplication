@@ -96,19 +96,18 @@ public class Controller extends JPanel {
         JLabel img = new JLabel(new ImageIcon(logo));
         img.setPreferredSize(new Dimension(200,150));
         
+        // Setting Font & Background Color for Opening Sequence
         label.setFont(new Font("Edwardian Script ITC", Font.PLAIN, 45));
         label.setForeground(new Color(254, 209, 65));
         label.setBackground(Color.decode("#00A3E0"));
 
-        // Image Icon Code
-        // ImageIcon logo = new ImageIcon("Apollo.png");
+        
 
         // New Database Button w/ Action Listener
         JButton newDatabase = new JButton("New Database");
         newDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("New Database");
-                //System.out.println("New Database");
                 mainPage();
                 List<PNM> members = new ArrayList<PNM>();
                 PopupManager.createRushClass(members, mainRushClass, mainFrame);
@@ -120,7 +119,6 @@ public class Controller extends JPanel {
         importDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("Import Database");
-               // System.out.println("Import Database");
                 mainPage();
                 List<PNM> members = importFile();
                 PopupManager.createRushClass(members, mainRushClass, mainFrame);
@@ -129,6 +127,7 @@ public class Controller extends JPanel {
         });
         
 
+        // Adding to Panel
         panel.add(label);
         panel.add(img);
         panel.add(newDatabase);
@@ -142,7 +141,6 @@ public class Controller extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(new Color(0, 163, 224));
-        // frame.pack();
         frame.setVisible(true);
 
     }
@@ -159,14 +157,9 @@ public class Controller extends JPanel {
         /**
          * Main Panel Settings
          */
-        
+    
         mainPanel.setLayout(new BorderLayout());
        
-        /**
-         * Opening Main Panel to Full Screen 
-         */
-        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        //mainFrame.setSize(screenSize.width, screenSize.height);
 
         /**
          * Adding Panels to Main Panel
@@ -363,10 +356,8 @@ public class Controller extends JPanel {
         JButton graphicView = new JButton("Gallery View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO Modify graphic view button to show graphic view of PNM's
                 Log.logger.info("Graphic View Button Pressed");
 
-               // System.out.println("Graphic View");
               //Remove everything, then add back button panel and gallery view
                 if (listviewMode) {
                 	try {
