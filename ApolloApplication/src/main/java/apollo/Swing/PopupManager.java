@@ -191,7 +191,12 @@ public class PopupManager {
 		
 		String imgName = new String("Photos/" + pnm.getName());
 		imgName = imgName.concat(".png");
-		BufferedImage img = ImageIO.read(new File(imgName));
+		BufferedImage img;
+		try {
+			img = ImageIO.read(new File(imgName));
+		} catch(IOException e) {
+			img = ImageIO.read(new File("Photos/Default.png"));
+		}
 		JPanel panel = new JPanel();
         frame.add(panel);
         
