@@ -7,7 +7,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
@@ -15,8 +21,10 @@ import apollo.Swing.PopupManager;
 import apollo.Enum.Tier;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
@@ -59,6 +67,8 @@ public class Controller extends JPanel {
 	static JScrollPane pane;
 	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
+    static JComboBox<String> colSelect;
+    static TableRowSorter<TableModel> sorter;
 
     /**
      * openDialogue
@@ -193,6 +203,7 @@ public class Controller extends JPanel {
          */
         setTopButtonPanel(mainPanel);
         setTablePanel(mainPanel);
+        setFilter(mainPanel);
 
         /**
          * Adding Panels to Main Frame
@@ -295,6 +306,7 @@ public class Controller extends JPanel {
                 if (!listviewMode) {
 	                Controller.mainPanel.removeAll();
 	            	setTopButtonPanel(Controller.mainPanel);
+	            	setFilter(Controller.mainPanel);
 	            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
 	            	mainFrame.setSize(1000,350);
 	                mainFrame.setLocationRelativeTo(null);
@@ -421,10 +433,50 @@ public class Controller extends JPanel {
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
         table.setFillsViewportHeight(true);
+        sorter = new TableRowSorter<TableModel>(model);
+        table.setRowSorter(sorter);
         
         pane = new JScrollPane(table);
 
         mainPanel.add(pane, BorderLayout.PAGE_END);
+    }
+    
+    public static void setFilter(JPanel mainPanel) {
+    	JLabel filterLabel = new JLabel("Filter:");
+    	colSelect = new JComboBox<String>(columnNames);
+    	final JTextField filterText = new JTextField();
+        filterText.setPreferredSize(new Dimension(80,20));
+        filterText.getDocument().addDocumentListener(
+                new DocumentListener() {
+                    public void changedUpdate(DocumentEvent e) {
+                        newFilter(filterText);
+                    }
+                    public void insertUpdate(DocumentEvent e) {
+                        newFilter(filterText);
+                    }
+                    public void removeUpdate(DocumentEvent e) {
+                        newFilter(filterText);
+                    }
+                });
+    	
+        JTextField clear = new JTextField();
+    	newFilter(clear);
+    	JPanel other = new JPanel();
+        other.add(filterLabel);
+        other.add(colSelect);
+        other.add(filterText);
+        other.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        mainPanel.add(other, BorderLayout.LINE_START);
+    }
+    
+    private static void newFilter(JTextField f) {
+    	RowFilter<? super TableModel, ? super Integer> rf = null;
+    	try {
+            rf = RowFilter.regexFilter(f.getText(), colSelect.getSelectedIndex());
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf);
     }
   
     public static JDialog createPopup(String title) {
