@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -47,7 +48,7 @@ public class PopupManager {
     	final JTextField fields[] = new JTextField[3];
     	JLabel labels[] = new JLabel[3];
     	labels[0] = new JLabel("Name: ");
-    	labels[1] = new JLabel("Date (dd/mm/yyyy): ");
+    	labels[1] = new JLabel("Date (mm/dd/yyyy): ");
     	labels[2] = new JLabel("Location: ");
         
         for (int i = 0; i < 3; i++) {
@@ -74,7 +75,7 @@ public class PopupManager {
 			public void actionPerformed(ActionEvent e) {
 				//create event and add to each person
 				try {
-					Date d = new SimpleDateFormat("dd/MM/yyyy").parse(fields[1].getText());
+					Date d = new SimpleDateFormat("mm/dd/yyyy").parse(fields[1].getText());
 					Event event = new Event(fields[0].getText(), d, fields[2].getText());
 					for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
 			        	if (names[i].isSelected()) {
@@ -206,7 +207,7 @@ public class PopupManager {
 	protected static void openMore(String name, final RushClass mainRushClass) {
 		final JFrame popup = new JFrame("More Information");
 		final int index = mainRushClass.findPerson(name);
-		PNM currPNM = mainRushClass.getMembers().get(index);
+		final PNM currPNM = mainRushClass.getMembers().get(index);
 		GridLayout layout = new GridLayout(5,2);
 		layout.setHgap(10);
 		layout.setVgap(10);
@@ -241,7 +242,17 @@ public class PopupManager {
 		JLabel l8 = new JLabel("Tier: " + currPNM.getT());
 		mainPanel.add(l8);
 		JButton vouchButton = new JButton("Vouch List");
+		vouchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	vouchListPopup(currPNM);
+            }
+        });
 		JButton eventButton = new JButton("Events Attended");
+		eventButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	personEventPopup(currPNM);
+            }
+        });
 		mainPanel.add(vouchButton);
 		mainPanel.add(eventButton);
 		
@@ -268,6 +279,83 @@ public class PopupManager {
 		popup.setVisible(true);
 		popup.pack();
 		popup.setLocationRelativeTo(null);
+	}
+	
+	public static void personEventPopup(PNM currPNM) {
+		final JFrame eventPopup = new JFrame("Events Attended");
+		GridLayout layout = new GridLayout(currPNM.getEventList().size()+1, 3);
+		layout.setHgap(10);
+		layout.setVgap(10);
+		JPanel title = new JPanel();
+		JLabel titleL = new JLabel("Events " + currPNM.getName() + " attended");
+		title.add(titleL);
+		eventPopup.add(title, BorderLayout.PAGE_START);
+		
+		JPanel eventPanel = new JPanel(layout);
+		if (currPNM.getEventList().size() == 0) {
+			JLabel error = new JLabel(currPNM.getName() + " has not attended any events");
+			eventPopup.add(error, BorderLayout.CENTER);
+		} else {
+			eventPanel.add(new JLabel("Name"));
+			eventPanel.add(new JLabel("Date"));
+			eventPanel.add(new JLabel("Location"));
+			for (int i = 0; i < currPNM.getEventList().size(); i++) {
+				DateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");  
+				eventPanel.add(new JLabel(currPNM.getEventList().get(i).getName()));
+				eventPanel.add(new JLabel(dateFormat.format(currPNM.getEventList().get(i).getDate())));
+				eventPanel.add(new JLabel(currPNM.getEventList().get(i).getLocation()));
+			}
+			eventPopup.add(eventPanel, BorderLayout.CENTER);
+		}
+    	JButton done = new JButton("Done");
+    	done.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	eventPopup.setVisible(false);
+            	eventPopup.dispose();
+            }
+        });
+    	JPanel donePanel = new JPanel();
+    	donePanel.add(done);
+    	eventPopup.add(donePanel, BorderLayout.PAGE_END);
+    	eventPopup.setVisible(true);
+    	eventPopup.pack();
+    	eventPopup.setLocationRelativeTo(null);
+	}
+	
+	public static void vouchListPopup(PNM currPNM) {
+		final JFrame vouchPopup = new JFrame("Vouch List");
+		GridLayout layout = new GridLayout(currPNM.getVouchList().size()/3, 3);
+		layout.setHgap(10);
+		layout.setVgap(10);
+		JPanel title = new JPanel();
+		JLabel titleL = new JLabel("Vouch List for " + currPNM.getName());
+		title.add(titleL);
+		vouchPopup.add(title, BorderLayout.PAGE_START);
+		
+		JPanel namesPanel = new JPanel(layout);
+		if (currPNM.getVouchList().size() == 0) {
+			JLabel error = new JLabel("No People in Vouch List");
+			vouchPopup.add(error, BorderLayout.CENTER);
+		} else {
+			for (int i = 0; i < currPNM.getVouchList().size(); i++) {
+				JLabel name = new JLabel(currPNM.getVouchList().get(i));
+				namesPanel.add(name);
+			}
+			vouchPopup.add(namesPanel, BorderLayout.CENTER);
+		}
+    	JButton done = new JButton("Done");
+    	done.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	vouchPopup.setVisible(false);
+            	vouchPopup.dispose();
+            }
+        });
+    	JPanel donePanel = new JPanel();
+    	donePanel.add(done);
+    	vouchPopup.add(donePanel, BorderLayout.PAGE_END);
+    	vouchPopup.setVisible(true);
+    	vouchPopup.pack();
+    	vouchPopup.setLocationRelativeTo(null);
 	}
 	
 	public static void iteratePerson(String s, JFrame popup, int index, RushClass mainRushClass) {
