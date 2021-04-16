@@ -1,6 +1,7 @@
 package apollo.Objects;
 
 import apollo.Enum.Semester;
+import apollo.Enum.Tier;
 
 import java.util.List;
 
@@ -32,17 +33,38 @@ public class RushClass {
 	}
 	
 	public void removePerson(String name) {
+		int index = findPerson(name);
+		if (index != -1) {
+			members.remove(index);
+		}
+	}
+	
+	public void editTier(String name, Tier t) {
+		int index = findPerson(name);
+		if (index != -1) {
+			members.get(index).setT(t);
+		}
+	}
+	
+	public void addEventToPerson(String name, Event e) {
+		int index = findPerson(name);
+		members.get(index).getEventList().add(e);
+	}
+	
+	public int findPerson(String name) {
 		Boolean found = false;
 		int index = 0;
 		while (!found && index != members.size()) {
 			if (name == members.get(index).getName()) {
 				found = true;
+			} else {
+				index++;
 			}
-			index++;
 		}
-		if (found) {
-			members.remove(index);
+		if (!found) {
+			index = -1;
 		}
+		return index;
 	}
 
 }

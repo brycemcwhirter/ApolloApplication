@@ -11,16 +11,12 @@ import javax.swing.table.DefaultTableModel;
 
 import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
-import apollo.Enum.Semester;
+import apollo.Swing.PopupManager;
 import apollo.Enum.Tier;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
@@ -38,6 +34,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 
@@ -62,14 +59,13 @@ public class Controller extends JPanel {
 	static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
-    static RushClass mainRushClass;
+    static RushClass mainRushClass = new RushClass();;
     static JTable table;
     private static JTextField[] editFields;
 	private static JLabel[] editLabels;
 	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
 	static JButton submitButton;
 	static JScrollPane pane;
-	static JPanel graphicPanel;
 	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
 
@@ -112,10 +108,11 @@ public class Controller extends JPanel {
         JButton newDatabase = new JButton("New Database");
         newDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("New Database");
+                Log.logger.info("New Database");
+                //System.out.println("New Database");
                 mainPage();
                 List<PNM> members = new ArrayList<PNM>();
-                createRushClass(members);
+                PopupManager.createRushClass(members, mainRushClass, mainFrame);
             }
         });
 
@@ -123,10 +120,11 @@ public class Controller extends JPanel {
         JButton importDatabase = new JButton("Import Database");
         importDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Import Database");
+                Log.logger.info("Import Database");
+               // System.out.println("Import Database");
                 mainPage();
                 List<PNM> members = importFile();
-                createRushClass(members);
+                PopupManager.createRushClass(members, mainRushClass, mainFrame);
             }
 
         });
@@ -228,9 +226,13 @@ public class Controller extends JPanel {
                 e1.printStackTrace();
             }
 
-            System.out.println("Opening: " + file.getName() + ".");
+            Log.logger.info("Opening: " + file.getName() + ".");
+
+            //System.out.println("Opening: " + file.getName() + ".");
         } else {
-            System.out.println("Open command cancelled by user.");
+            Log.logger.info("Open Commana Caancelled by user.");
+
+            //System.out.println("Open command cancelled by user.");
         }
         return members;
     }
@@ -269,7 +271,9 @@ public class Controller extends JPanel {
         JButton addNewPerson = new JButton("Add Person");
         addNewPerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Add Person");
+                Log.logger.info("Add Person Button Pressed");
+
+                //System.out.println("Add Person");
                 final JDialog popup = createPopup("Add Person");
                 //Action listener for adding a person button
                 submitButton.addActionListener(new ActionListener() {
@@ -302,7 +306,10 @@ public class Controller extends JPanel {
         JButton removePerson = new JButton("Remove Person");
         removePerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Remove Person");
+
+                Log.logger.info("Remove Person Button Pressed");
+
+                //System.out.println("Remove Person");
                 //Check to make sure that a row is selected
                 if (table.getSelectedRow() != -1) {
                 	Object[] options = {"Yes", "No"};
@@ -333,7 +340,10 @@ public class Controller extends JPanel {
         listView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	//Remove everything, then add back button panel and table
-                System.out.println("List View");
+
+                Log.logger.info("List View Button Pressed");
+
+               // System.out.println("List View");
                 if (!listviewMode) {
 	                Controller.mainPanel.removeAll();
 	            	setTopButtonPanel(Controller.mainPanel);
@@ -347,18 +357,24 @@ public class Controller extends JPanel {
 
 
 
-        /** Graphic View Button
+        /** Gallery View
          * 
-         * This button organizes the table into a graphic view
+         * This button organizes the table into a gallery view
          */
-        JButton graphicView = new JButton("Graphic View");
+        JButton graphicView = new JButton("Gallery View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //TODO Modify graphic view button to show graphic view of PNM's
-                System.out.println("Graphic View");
+                Log.logger.info("Graphic View Button Pressed");
+
+               // System.out.println("Graphic View");
               //Remove everything, then add back button panel and gallery view
                 if (listviewMode) {
-                	Controller.setGraphicPanel(Controller.mainPanel);
+                	try {
+						PopupManager.setGraphicPanel(Controller.mainPanel, mainFrame, mainRushClass);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
                 	listviewMode = false;
                 }
             }
@@ -404,21 +420,44 @@ public class Controller extends JPanel {
 						excel.close();
 
 					} catch (IOException er) {
-						System.out.println(er);
+                        Log.logger.warning(er.getMessage());
+
+						//System.out.println(er);
 					}
 				}
+            }
+        });
+        
+        JButton editTier = new JButton("Edit Tier");
+        editTier.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Log.logger.info("Editing Tier");
+                //System.out.println("Edit Tier");
+                //Check to make sure that a row is selected
+                if (table.getSelectedRow() != -1) {
+                	PopupManager.tierPopup(model, table, mainRushClass);
+                }
+            }
+        });
+        
+        JButton eventButton = new JButton("Create Event");
+        eventButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                PopupManager.eventPopup(mainRushClass);
             }
         });
 
         
 
         // Adding Buttons to the button panel
+       
         topButtonPanel.add(addNewPerson);
         topButtonPanel.add(removePerson);
         topButtonPanel.add(listView);
         topButtonPanel.add(graphicView);
         topButtonPanel.add(exportToFile);
-
+        topButtonPanel.add(editTier);
+        topButtonPanel.add(eventButton);
 
         // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -475,40 +514,7 @@ public class Controller extends JPanel {
      * @param mainPanel
      */
     //TODO Modify graphic panel to show graphics
-    public static  void setGraphicPanel(JPanel mainPanel) {
-    	mainPanel.removeAll();
-    	setTopButtonPanel(mainPanel);
-        
-    	//Remove everything, then add back button panel and gallery view
-        List<PNM> test = mainRushClass.getMembers();
-        GridLayout lay = new GridLayout(3,(test.size()/2)+1);
-        graphicPanel = new JPanel();
-        graphicPanel.setLayout(lay);
-        mainPanel.add(graphicPanel, BorderLayout.PAGE_END);
-      //For each person, create a new panel with their information and add to grid
-        for (int i = 0; i < test.size(); i++) {
-        	JPanel p = new JPanel();
-        	GridLayout lay2 = new GridLayout(3,1);
-        	p.setLayout(lay2);
-        	JLabel text = new JLabel();
-        	text.setText(test.get(i).getName());
-        	JLabel text2 = new JLabel();
-        	text2.setText(test.get(i).getMajor());
-        	p.add(text);
-        	p.add(text2);
-        	JButton bt = new JButton("More");
-        	p.add(bt);
-        	p.setSize(new Dimension(30, 100));
-        	p.setBorder(BorderFactory.createLineBorder(Color.black));
-        	graphicPanel.add(p);
-        }
-        if (test.size() < 2) {
-        	mainFrame.setSize(1000,200);
-        } else {
-        	mainFrame.setSize(1000,test.size()/2 * 100);
-        }
-        mainFrame.setLocationRelativeTo(null);
-    }
+    
     
 
 
@@ -523,70 +529,7 @@ public class Controller extends JPanel {
      * 
      * @param list comments
      */
-    public static void createRushClass(final List<PNM> list) {
-    	mainRushClass = new RushClass();
-    	
-    	GridLayout layout = new GridLayout(0,2);
-    	JPanel mainPanel = new JPanel();
-    	mainPanel.setLayout(layout);
-    	
-    	//Create the popup to receive the data
-    	final JFrame popup = new JFrame("Create Rush Class");
-    	final JTextField year = new JTextField();
-    	JLabel yearLabel = new JLabel("Year:");
-    	year.setBounds(20, 220, 100, 25);
-    	
-    	mainPanel.add(yearLabel);
-    	mainPanel.add(year);
-    	
-    	//Create a JComboBox to select the semester
-    	Semester[] semesters = {Semester.FALL, Semester.SPRING};
-    	mainRushClass.setS(Semester.FALL);
-    	final JComboBox<Semester> semesterList = new JComboBox<Semester>(semesters);
-    	semesterList.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Semester input = (Semester) semesterList.getSelectedItem();
-                mainRushClass.setS(input);
-            }
-        });
-    	
-    	popup.add(mainPanel, BorderLayout.NORTH);
-    	popup.add(semesterList);
-    	popup.setVisible(true);
-        popup.setLocationRelativeTo(null);
-        popup.setSize(300,120);
-        
-        //Once submitted, assign the correct values to the rush class
-        JButton submitButton = new JButton("Submit");
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainRushClass.setYear(Integer.parseInt(year.getText()));
-                mainRushClass.setMembers(list);
-                JLabel semesterLabel = new JLabel("Semester: " + mainRushClass.getS().toString());
-                JLabel yearLabel = new JLabel("Year: " + year.getText());
-                JPanel top = new JPanel();
-                top.add(semesterLabel);
-                top.add(yearLabel);
-                mainFrame.add(top, BorderLayout.PAGE_START);
-                mainFrame.pack();
-                mainFrame.setSize(1000,350);
-                
-                popup.setVisible(false);
-                popup.dispose();
-            }
-        });
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(submitButton);
-        popup.add(buttonPanel, BorderLayout.PAGE_END);
-    }
-
-
-
-
-
-
-
-
+    
     
     
     /** 
