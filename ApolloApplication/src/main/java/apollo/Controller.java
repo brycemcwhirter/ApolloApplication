@@ -34,7 +34,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 
@@ -505,30 +504,7 @@ public class Controller extends JPanel {
 
 
     
-    /** 
-     * setGraphicPanel
-     * 
-     * 
-     * 
-     * 
-     * @param mainPanel
-     */
-    //TODO Modify graphic panel to show graphics
-    
-    
-
-
-
-
-
-
-    /** 
-     * createRushClass
-     * 
-     * Prompts the user to enter information for the rush class
-     * 
-     * @param list comments
-     */
+  
     
     
     
