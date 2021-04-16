@@ -7,6 +7,9 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import apollo.Controller;
 import apollo.Enum.Semester;
 import apollo.Enum.Tier;
+import apollo.Objects.Event;
 import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
 
@@ -34,7 +38,7 @@ public class PopupManager {
     	JPanel mainP = new JPanel();
     	mainP.setLayout(new GridLayout(0,2));
     	
-    	JTextField fields[] = new JTextField[3];
+    	final JTextField fields[] = new JTextField[3];
     	JLabel labels[] = new JLabel[3];
     	labels[0] = new JLabel("Name: ");
     	labels[1] = new JLabel("Date (dd/mm/yyyy): ");
@@ -62,12 +66,19 @@ public class PopupManager {
         
         submitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//create event
-				for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
-		        	if (names[i].isSelected()) {
-		        		System.out.println(names[i].getText());
-		        	}
-		        }
+				//create event and add to each person
+				try {
+					Date d = new SimpleDateFormat("dd/MM/yyyy").parse(fields[1].getText());
+					Event event = new Event(fields[0].getText(), d, fields[2].getText());
+					for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
+			        	if (names[i].isSelected()) {
+			        		mainRushClass.addEventToPerson(names[i].getText(), event);
+			        	}
+			        }
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			
 				popup.setVisible(false);
 				popup.dispose();
 			}

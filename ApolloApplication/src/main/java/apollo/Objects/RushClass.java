@@ -46,6 +46,11 @@ public class RushClass {
 		}
 	}
 	
+	public void addEventToPerson(String name, Event e) {
+		int index = findPerson(name);
+		members.get(index).getEventList().add(e);
+	}
+	
 	public int findPerson(String name) {
 		Boolean found = false;
 		int index = 0;

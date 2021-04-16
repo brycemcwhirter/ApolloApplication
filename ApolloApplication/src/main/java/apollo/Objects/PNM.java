@@ -1,5 +1,6 @@
 package apollo.Objects;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +29,8 @@ public class PNM {
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.t = temp;
+        this.vouchList = new ArrayList<String>();
+        this.eventList = new ArrayList<Event>();
     }
 
     public String getName() {
