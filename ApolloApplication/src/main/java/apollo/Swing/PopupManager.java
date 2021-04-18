@@ -82,6 +82,7 @@ public class PopupManager {
 			        		mainRushClass.addEventToPerson(names[i].getText(), event);
 			        	}
 			        }
+					mainRushClass.getEvents().add(event);
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
@@ -250,7 +251,7 @@ public class PopupManager {
 		JButton eventButton = new JButton("Events Attended");
 		eventButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	personEventPopup(currPNM);
+            	showEvents(currPNM.getEventList(), currPNM.getName());
             }
         });
 		mainPanel.add(vouchButton);
@@ -281,29 +282,39 @@ public class PopupManager {
 		popup.setLocationRelativeTo(null);
 	}
 	
-	public static void personEventPopup(PNM currPNM) {
-		final JFrame eventPopup = new JFrame("Events Attended");
-		GridLayout layout = new GridLayout(currPNM.getEventList().size()+1, 3);
+	public static void showEvents(List<Event> events, String name) {
+		final JFrame eventPopup = new JFrame("Event List");
+		GridLayout layout = new GridLayout(0, 3);
 		layout.setHgap(10);
-		layout.setVgap(10);
-		JPanel title = new JPanel();
-		JLabel titleL = new JLabel("Events " + currPNM.getName() + " attended");
-		title.add(titleL);
-		eventPopup.add(title, BorderLayout.PAGE_START);
-		
+		layout.setVgap(10);	
 		JPanel eventPanel = new JPanel(layout);
-		if (currPNM.getEventList().size() == 0) {
-			JLabel error = new JLabel(currPNM.getName() + " has not attended any events");
+		
+		if (events.size() == 0 && name != "") {
+			JLabel error = new JLabel(name + " has not attended any events");
+			eventPopup.add(error, BorderLayout.CENTER);
+		} else if (name == "" && events.size() == 0){
+			JLabel error = new JLabel("There are no events");
 			eventPopup.add(error, BorderLayout.CENTER);
 		} else {
+			
 			eventPanel.add(new JLabel("Name"));
 			eventPanel.add(new JLabel("Date"));
 			eventPanel.add(new JLabel("Location"));
-			for (int i = 0; i < currPNM.getEventList().size(); i++) {
-				DateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");  
-				eventPanel.add(new JLabel(currPNM.getEventList().get(i).getName()));
-				eventPanel.add(new JLabel(dateFormat.format(currPNM.getEventList().get(i).getDate())));
-				eventPanel.add(new JLabel(currPNM.getEventList().get(i).getLocation()));
+			
+			for (int i = 0; i < events.size(); i++) {
+				DateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");  	
+				JLabel eventName = new JLabel(events.get(i).getName());
+				Font f = eventName.getFont();
+				eventName.setFont(f.deriveFont(f.getStyle() | ~Font.BOLD));
+				eventPanel.add(eventName);
+				
+				JLabel eventDate = new JLabel(dateFormat.format(events.get(i).getDate()));
+				eventDate.setFont(f.deriveFont(f.getStyle() | ~Font.BOLD));
+				eventPanel.add(eventDate);
+				
+				JLabel eventLoc = (new JLabel(events.get(i).getLocation()));
+				eventLoc.setFont(f.deriveFont(f.getStyle() | ~Font.BOLD));
+				eventPanel.add(eventLoc);
 			}
 			eventPopup.add(eventPanel, BorderLayout.CENTER);
 		}

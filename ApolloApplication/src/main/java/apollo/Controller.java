@@ -398,6 +398,13 @@ public class Controller extends JPanel {
                 PopupManager.eventPopup(mainRushClass);
             }
         });
+        
+        JButton showEventsButton = new JButton("Show Events");
+        showEventsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                PopupManager.showEvents(mainRushClass.getEvents(), "");
+            }
+        });
 
         // Adding Buttons to the button panel
         topButtonPanel.add(addNewPerson);
@@ -407,6 +414,7 @@ public class Controller extends JPanel {
         topButtonPanel.add(exportToFile);
         topButtonPanel.add(editTier);
         topButtonPanel.add(eventButton);
+        topButtonPanel.add(showEventsButton);
 
         // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
