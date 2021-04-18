@@ -1,6 +1,7 @@
 package apollo.Swing;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -350,6 +351,8 @@ public class PopupManager {
 		} else {
 			for (int i = 0; i < currPNM.getVouchList().size(); i++) {
 				JLabel name = new JLabel(currPNM.getVouchList().get(i));
+				Font f = name.getFont();
+				name.setFont(f.deriveFont(f.getStyle() | ~Font.BOLD));
 				namesPanel.add(name);
 			}
 			vouchPopup.add(namesPanel, BorderLayout.CENTER);
@@ -367,6 +370,44 @@ public class PopupManager {
     	vouchPopup.setVisible(true);
     	vouchPopup.pack();
     	vouchPopup.setLocationRelativeTo(null);
+	}
+	
+	public static void addVouchPopup(DefaultTableModel model, JTable table, final RushClass mainRushClass) {
+		final JFrame popup = new JFrame("Edit Tier");
+		final int index = mainRushClass.findPerson((String) model.getValueAt(table.getSelectedRow(), 0));
+    	JLabel name = new JLabel("Adding vouch names for " + (String) model.getValueAt(table.getSelectedRow(), 0));
+    	name.setFont(new Font("Arial Hebrew", Font.PLAIN, 15));
+    	final JTextField text = new JTextField();
+    	text.setPreferredSize(new Dimension(100,20));
+    	
+    	JButton submitButton = new JButton("Submit");
+        submitButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	mainRushClass.getMembers().get(index).getVouchList().add(text.getText());
+            	text.setText("");
+            }
+        });
+        name.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        popup.add(name, BorderLayout.PAGE_START);
+        JPanel p = new JPanel();
+        p.add(text);
+        p.add(submitButton);
+        popup.add(p, BorderLayout.CENTER);
+        
+        JButton done = new JButton("Done");
+    	done.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	popup.setVisible(false);
+            	popup.dispose();
+            }
+        });
+    	JPanel donePanel = new JPanel();
+    	donePanel.add(done);
+    	popup.add(donePanel, BorderLayout.PAGE_END);
+        
+    	popup.setVisible(true);
+    	popup.pack();
+    	popup.setLocationRelativeTo(null);
 	}
 	
 	public static void iteratePerson(String s, JFrame popup, int index, RushClass mainRushClass) {

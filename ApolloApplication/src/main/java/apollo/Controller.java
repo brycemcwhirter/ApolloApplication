@@ -405,6 +405,15 @@ public class Controller extends JPanel {
                 PopupManager.showEvents(mainRushClass.getEvents(), "");
             }
         });
+        
+        JButton addVouchNames = new JButton("Add Vouch Names");
+        addVouchNames.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	if (table.getSelectedRow() != -1) {
+                	PopupManager.addVouchPopup(model, table, mainRushClass);
+                }
+            }
+        });
 
         // Adding Buttons to the button panel
         topButtonPanel.add(addNewPerson);
@@ -415,6 +424,7 @@ public class Controller extends JPanel {
         topButtonPanel.add(editTier);
         topButtonPanel.add(eventButton);
         topButtonPanel.add(showEventsButton);
+        topButtonPanel.add(addVouchNames);
 
         // Button Panel Settings
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
