@@ -43,7 +43,6 @@ import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 
 
 /**
@@ -224,11 +223,6 @@ public class Controller extends JPanel {
      * @param   mainPanel   the main panel of the open page
      */
     public static void setTopButtonPanel(JPanel mainPanel) {
-
-        JPanel topButtonPanel = new JPanel();
-        //topButtonPanel.setLayout(new FlowLayout());
-
-
 
         /** Add New Person
          * 
@@ -414,25 +408,28 @@ public class Controller extends JPanel {
                 }
             }
         });
+        
+        JPanel tableButtons = new JPanel(new GridLayout(0,3, 5, 5));
+        JPanel otherPanel = new JPanel(new GridLayout(0,2,5,5));
 
         // Adding Buttons to the button panel
-        topButtonPanel.add(addNewPerson);
-        topButtonPanel.add(removePerson);
-        topButtonPanel.add(listView);
-        topButtonPanel.add(graphicView);
-        topButtonPanel.add(exportToFile);
-        topButtonPanel.add(editTier);
-        topButtonPanel.add(eventButton);
-        topButtonPanel.add(showEventsButton);
-        topButtonPanel.add(addVouchNames);
+        tableButtons.add(addNewPerson);
+        tableButtons.add(listView);
+        tableButtons.add(graphicView);
+        tableButtons.add(exportToFile);
+        tableButtons.add(eventButton);
+        tableButtons.add(showEventsButton);
+        
+        otherPanel.add(addVouchNames);
+        otherPanel.add(removePerson);
+        otherPanel.add(editTier);
 
-        // Button Panel Settings
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        topButtonPanel.setSize(screenSize.width, 1000);
-        topButtonPanel.setVisible(true);
+        tableButtons.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        otherPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
         // Adding button panel to main panel 
-        mainPanel.add(topButtonPanel, BorderLayout.CENTER);
+        mainPanel.add(tableButtons, BorderLayout.LINE_START);
+        mainPanel.add(otherPanel, BorderLayout.LINE_END);
     }
 
     
@@ -484,7 +481,7 @@ public class Controller extends JPanel {
         other.add(colSelect);
         other.add(filterText);
         other.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
-        mainPanel.add(other, BorderLayout.LINE_START);
+        mainPanel.add(other, BorderLayout.CENTER);
     }
     
     private static void newFilter(JTextField f) {

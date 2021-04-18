@@ -158,10 +158,12 @@ public class PopupManager {
 	public static  void setGraphicPanel(JPanel mainPanel, JFrame mainFrame, final RushClass mainRushClass) throws IOException {
     	mainPanel.removeAll();
     	Controller.setTopButtonPanel(mainPanel);
+    	JPanel blank = new JPanel();
+    	mainPanel.add(blank, BorderLayout.CENTER);
         
     	//Remove everything, then add back button panel and gallery view
         List<PNM> members = mainRushClass.getMembers();
-        GridLayout lay = new GridLayout(3,(members.size()/2)+1);
+        GridLayout lay = new GridLayout(0,3);
         lay.setHgap(10);
         lay.setVgap(10);
         JPanel graphicPanel = new JPanel();
