@@ -81,6 +81,8 @@ public class PopupManager {
 					for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
 			        	if (names[i].isSelected()) {
 			        		mainRushClass.addEventToPerson(names[i].getText(), event);
+			        		int index = mainRushClass.findPerson(names[i].getText());
+			        		event.getAttendees().add(mainRushClass.getMembers().get(index));
 			        	}
 			        }
 					mainRushClass.getEvents().add(event);

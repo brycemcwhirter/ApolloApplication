@@ -298,16 +298,19 @@ public class Controller extends JPanel {
             	//Remove everything, then add back button panel and table
                 System.out.println("List View");
                 if (!listviewMode) {
+                	listviewMode = true;
 	                Controller.mainPanel.removeAll();
 	            	setTopButtonPanel(Controller.mainPanel);
 	            	setFilter(Controller.mainPanel);
 	            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
 	            	mainFrame.setSize(1000,350);
 	                mainFrame.setLocationRelativeTo(null);
-	                listviewMode = true;
                 }
             } 
         });
+        if (listviewMode) {
+            listView.setEnabled(false);
+        }
 
 
 
@@ -322,15 +325,18 @@ public class Controller extends JPanel {
             	System.out.println("Graphic View");
             	//Remove everything, then add back button panel and gallery view
                 if (listviewMode) {
+                	listviewMode = false;
                 	try {
 						PopupManager.setGraphicPanel(Controller.mainPanel, mainFrame, mainRushClass);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-                	listviewMode = false;
                 }
             }
         });
+        if (!listviewMode) {
+            graphicView.setEnabled(false);
+        }
         
         /** Export to File
          * 
@@ -429,7 +435,9 @@ public class Controller extends JPanel {
 
         // Adding button panel to main panel 
         mainPanel.add(tableButtons, BorderLayout.LINE_START);
-        mainPanel.add(otherPanel, BorderLayout.LINE_END);
+        if (listviewMode) {
+        	mainPanel.add(otherPanel, BorderLayout.LINE_END);
+        }
     }
 
     
