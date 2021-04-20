@@ -355,7 +355,35 @@ public class Controller extends JPanel {
             }
         });
         
-        JPanel tableButtons = new JPanel(new GridLayout(0,3, 5, 5));
+        JButton importEvents = new JButton("Import Events");
+        importEvents.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	FileManager.importEvents();
+            }
+        });
+        
+        JButton importVouchList = new JButton("Import Vouch List");
+        importVouchList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	FileManager.importVouchList();
+            }
+        });
+        
+        JButton exportVouchList = new JButton("Export Vouch List");
+        exportVouchList.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	FileManager.exportVouchList();
+            }
+        });
+        
+        JButton exportEvents = new JButton("Export Events");
+        exportEvents.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	FileManager.exportEventList();
+            }
+        });
+        
+        JPanel tableButtons = new JPanel(new GridLayout(0,4, 5, 5));
         JPanel otherPanel = new JPanel(new GridLayout(0,2,5,5));
 
         // Adding Buttons to the button panel
@@ -365,6 +393,10 @@ public class Controller extends JPanel {
         tableButtons.add(exportToFile);
         tableButtons.add(eventButton);
         tableButtons.add(showEventsButton);
+        tableButtons.add(importEvents);
+        tableButtons.add(importVouchList);
+        tableButtons.add(exportVouchList);
+        tableButtons.add(exportEvents);
         
         otherPanel.add(addVouchNames);
         otherPanel.add(removePerson);

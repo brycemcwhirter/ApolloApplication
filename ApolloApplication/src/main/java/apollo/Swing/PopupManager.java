@@ -194,10 +194,10 @@ public class PopupManager {
         //For each person, create a new panel with their information and add to grid
         for (int i = 0; i < members.size(); i++) {
         	final int j = i;
-        	JPanel p = new JPanel(new GridLayout(5,1));
+        	JPanel p = new JPanel(new GridLayout(0,1));
         	JLabel text = new JLabel(members.get(i).getName());
-        	JLabel text2 = new JLabel(members.get(i).getMajor());
-        	JLabel text3 = new JLabel(members.get(i).getPhoneNumber());
+        	JLabel text2 = new JLabel("Legacy Status: " + members.get(i).getLegacy());
+        	JLabel text3 = new JLabel("Tier: " + members.get(i).getT());
         	p.add(text);
         	p.add(text2);
         	p.add(text3);

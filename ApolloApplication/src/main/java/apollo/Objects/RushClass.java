@@ -63,7 +63,7 @@ public class RushClass {
 		Boolean found = false;
 		int index = 0;
 		while (!found && index != members.size()) {
-			if (name == members.get(index).getName()) {
+			if (name.contains(members.get(index).getName())) {
 				found = true;
 			} else {
 				index++;
