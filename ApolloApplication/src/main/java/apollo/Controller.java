@@ -2,6 +2,9 @@ package apollo;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -310,7 +313,7 @@ public class Controller extends JPanel {
          * 
          * This button will export the table to a file
          */
-        JButton exportToFile = new JButton("Export");
+        JMenuItem exportToFile = new JMenuItem("Export PNMs");
         exportToFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("Exporting File");
@@ -355,48 +358,53 @@ public class Controller extends JPanel {
             }
         });
         
-        JButton importEvents = new JButton("Import Events");
+        JMenuItem importEvents = new JMenuItem("Import Events");
         importEvents.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	FileManager.importEvents();
             }
         });
         
-        JButton importVouchList = new JButton("Import Vouch List");
+        JMenuItem importVouchList = new JMenuItem("Import Vouch List");
         importVouchList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	FileManager.importVouchList();
             }
         });
         
-        JButton exportVouchList = new JButton("Export Vouch List");
+        JMenuItem exportVouchList = new JMenuItem("Export Vouch List");
         exportVouchList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	FileManager.exportVouchList();
             }
         });
         
-        JButton exportEvents = new JButton("Export Events");
+        JMenuItem exportEvents = new JMenuItem("Export Events");
         exportEvents.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	FileManager.exportEventList();
             }
         });
         
-        JPanel tableButtons = new JPanel(new GridLayout(0,4, 5, 5));
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Main Menu");
+        menuBar.add(menu);
+        menu.add(exportToFile);
+        menu.add(importEvents);
+        menu.add(exportEvents);
+        menu.add(importVouchList);
+        menu.add(exportVouchList);
+        mainFrame.setJMenuBar(menuBar);
+        
+        JPanel tableButtons = new JPanel(new GridLayout(0,3, 5, 5));
         JPanel otherPanel = new JPanel(new GridLayout(0,2,5,5));
 
         // Adding Buttons to the button panel
         tableButtons.add(addNewPerson);
         tableButtons.add(listView);
         tableButtons.add(graphicView);
-        tableButtons.add(exportToFile);
         tableButtons.add(eventButton);
         tableButtons.add(showEventsButton);
-        tableButtons.add(importEvents);
-        tableButtons.add(importVouchList);
-        tableButtons.add(exportVouchList);
-        tableButtons.add(exportEvents);
         
         otherPanel.add(addVouchNames);
         otherPanel.add(removePerson);
