@@ -2,7 +2,6 @@ package apollo;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -17,24 +16,21 @@ import javax.swing.table.TableRowSorter;
 
 import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
+import apollo.Swing.Button;
 import apollo.Swing.PopupManager;
-import apollo.Enum.Tier;
+import apollo.Table.TableView;
+import apollo.FileManager.FileManager;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,24 +56,40 @@ public class Controller extends JPanel {
 	
 
 
-
-
 	static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
     final static JPanel mainPanel = new JPanel();
     static RushClass mainRushClass = new RushClass();;
     static JTable table;
-    private static JTextField[] editFields;
-	private static JLabel[] editLabels;
-	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
-	static JButton submitButton;
 	static JScrollPane pane;
-	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
     static JComboBox<String> colSelect;
     static TableRowSorter<TableModel> sorter;
 
 
+    public static RushClass getMainRushClass() {
+        return mainRushClass;
+    }
+
+    public static JFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    public static DefaultTableModel getModel() {
+        return model;
+    }
+
+    public static JTable getTable() {
+        return table;
+    }
+
+    public static JPanel getMainpanel() {
+        return mainPanel;
+    }
+
+    public static JScrollPane getPane() {
+        return pane;
+    }
 
 
 
@@ -128,9 +140,7 @@ public class Controller extends JPanel {
         importDatabase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("Import Database");
-                mainPage();
-                List<PNM> members = importFile();
-                PopupManager.createRushClass(members, mainRushClass, mainFrame);
+                Button.importDatabase();
             }
 
         });
@@ -196,49 +206,7 @@ public class Controller extends JPanel {
 
 
     
-    /** 
-     * @return List<PNM>
-     */
-    public static List<PNM> importFile() {
-    	JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-        int returnVal = fc.showOpenDialog(fc);
-        List<PNM> members = new ArrayList<PNM>();
-
-        //Check if file is opened
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new FileReader(file));
-
-                String line = null;
-                //Parse through file
-                while ((line = reader.readLine()) != null) {
-                    String temp[] = line.split(",");
-
-                    //Add person to the table
-                    model.addRow(new Object[] { temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6],
-                            temp[7] });
-                    PNM pnm = new PNM(temp[0], temp[1], temp[2], temp[3], Boolean.parseBoolean(temp[4]), Integer.parseInt(temp[5]), 
-                    		temp[6], Tier.valueOf(temp[7]));
-                    members.add(pnm);
-                }
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-            Log.logger.info("Opening: " + file.getName() + ".");
-
-            //System.out.println("Opening: " + file.getName() + ".");
-        } else {
-            Log.logger.info("Open Commana Caancelled by user.");
-
-            //System.out.println("Open command cancelled by user.");
-        }
-        return members;
-    }
+    
 
 
 
@@ -271,26 +239,9 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("Add Person Button Pressed");
 
-                //System.out.println("Add Person");
-                final JDialog popup = createPopup("Add Person");
-                //Action listener for adding a person button
-                submitButton.addActionListener(new ActionListener() {
-    				@Override
-    				public void actionPerformed(ActionEvent e) {
-    					String[] temp = new String[columnNames.length];
-    					for (int i = 0; i < columnNames.length; i++) {
-    						temp[i] = editFields[i].getText();
-    					}
-    					PNM pnm = new PNM(temp[0], temp[1], temp[2], temp[3], Boolean.parseBoolean(temp[4]), Integer.parseInt(temp[5]), 
-                        		temp[6], Tier.valueOf(temp[7]));
-    					mainRushClass.addMember(pnm);
-    					//Add data from text fields to table
-    					model.addRow(temp); 
-    					popup.setVisible(false);
-    					popup.dispose();
-    				}
-            		
-            	});
+                Button.addNewPerson();
+
+                
             } 
         });
 
@@ -307,24 +258,7 @@ public class Controller extends JPanel {
 
                 Log.logger.info("Remove Person Button Pressed");
 
-                //System.out.println("Remove Person");
-                //Check to make sure that a row is selected
-                if (table.getSelectedRow() != -1) {
-                	Object[] options = {"Yes", "No"};
-            		int n = JOptionPane.showOptionDialog(mainFrame,
-            			    "Are you sure you want to remove " + (model.getValueAt(table.getSelectedRow(), 0)) + "?",
-            			    "Delete Row?",
-            			    JOptionPane.YES_NO_OPTION,
-            			    JOptionPane.QUESTION_MESSAGE,
-            			    null,
-            			    options,
-            			    options[0]);
-    	        	if (n == 0) {
-    	        		//Remove the person from the table and the rush class
-	                	mainRushClass.removePerson((String) model.getValueAt(table.getSelectedRow(), 0));
-	                	model.removeRow(table.getSelectedRow());
-    	        	}
-                }
+                Button.removePerson();
             }
         });
 
@@ -342,18 +276,14 @@ public class Controller extends JPanel {
                 Log.logger.info("List View Button Pressed");
 
                // System.out.println("List View");
-                if (!listviewMode) {
-                	listviewMode = true;
-	                Controller.mainPanel.removeAll();
-	            	setTopButtonPanel(Controller.mainPanel);
-	            	setFilter(Controller.mainPanel);
-	            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
-	            	mainFrame.setSize(1000,350);
-	                mainFrame.setLocationRelativeTo(null);
+                if (!TableView.getListviewMode()) {
+                    TableView.setListviewMode(true);
+                    TableView.listView();
+                	
                 }
             } 
         });
-        if (listviewMode) {
+        if (TableView.getListviewMode()) {
             listView.setEnabled(false);
         }
 
@@ -368,19 +298,11 @@ public class Controller extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 //TODO Modify graphic view button to show graphic view of PNM's
                 Log.logger.info("Gallery View");
-
-            	//Remove everything, then add back button panel and gallery view
-                if (listviewMode) {
-                	listviewMode = false;
-                	try {
-						PopupManager.setGraphicPanel(Controller.mainPanel, mainFrame, mainRushClass);
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-                }
+                TableView.galleryView();
+            	
             }
         });
-        if (!listviewMode) {
+        if (!TableView.getListviewMode()) {
             graphicView.setEnabled(false);
         }
         
@@ -391,43 +313,12 @@ public class Controller extends JPanel {
         JButton exportToFile = new JButton("Export");
         exportToFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
-				fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
-				int returnVal = fc.showOpenDialog(fc);
-
-				//Check if file is open
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fc.getSelectedFile();
-					try {
-						FileWriter excel = new FileWriter(file);
-
-						//Export the column names to the file
-						for (int i = 0; i < model.getColumnCount(); i++) {
-							excel.write(model.getColumnName(i) + ",");
-						}
-						excel.write("\n");
-
-						//Export the rest of the table to the file
-						for (int i = 0; i < model.getRowCount(); i++) {
-							for (int j = 0; j < model.getColumnCount(); j++) {
-								if (model.getValueAt(i, j) != null) {
-									excel.write(model.getValueAt(i, j).toString() + ",");
-								} else {
-									excel.write(",");
-								}
-							}
-							excel.write("\n");
-						}
-						excel.close();
-
-					} catch (IOException er) {
-                        Log.logger.warning(er.getMessage());
-
-						//System.out.println(er);
-					}
+                Log.logger.info("Exporting File");
+                FileManager.exportFile();
+				
 				}
             }
-        });
+        );
         
         JButton editTier = new JButton("Edit Tier");
         editTier.addActionListener(new ActionListener() {
@@ -484,7 +375,7 @@ public class Controller extends JPanel {
 
         // Adding button panel to main panel 
         mainPanel.add(tableButtons, BorderLayout.LINE_START);
-        if (listviewMode) {
+        if (TableView.getListviewMode()) {
         	mainPanel.add(otherPanel, BorderLayout.LINE_END);
         }
     }
@@ -505,7 +396,7 @@ public class Controller extends JPanel {
      */
     public static void setTablePanel(JPanel mainPanel) {
        
-        model = new DefaultTableModel(columnNames, 0);
+        model = new DefaultTableModel(PNM.getColumnNames(), 0);
 
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
@@ -520,7 +411,7 @@ public class Controller extends JPanel {
     
     public static void setFilter(JPanel mainPanel) {
     	JLabel filterLabel = new JLabel("Filter:");
-    	colSelect = new JComboBox<String>(columnNames);
+    	colSelect = new JComboBox<String>(PNM.getColumnNames());
     	final JTextField filterText = new JTextField();
         filterText.setPreferredSize(new Dimension(80,20));
         filterText.getDocument().addDocumentListener(
@@ -556,47 +447,7 @@ public class Controller extends JPanel {
         sorter.setRowFilter(rf);
     }
   
-    public static JDialog createPopup(String title) {
-    	final JDialog popup = new JDialog(mainFrame, title);
-    	GridLayout layout = new GridLayout(0,2);
-    	JPanel mainPanel = new JPanel();
-    	mainPanel.setLayout(layout);
-    	
-    	editFields = new JTextField[columnNames.length];
-    	editLabels = new JLabel[columnNames.length];
-        
-    	//Create the correct amount of edit fields and add them to the panel
-        for (int i = 0; i < columnNames.length; i++) {
-        	editFields[i] = new JTextField();
-        	editFields[i].setBounds(20, 220, 100, 25);
-        	editLabels[i] = new JLabel(columnNames[i] + ":");
-        	mainPanel.add(editLabels[i]);
-        	mainPanel.add(editFields[i]);
-        }
-      
-        popup.add(mainPanel, BorderLayout.NORTH);
-        submitButton = new JButton("Submit");
-        JButton cancelButton = new JButton("Cancel");
-        
-        cancelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				popup.setVisible(false);
-				popup.dispose();
-			}
-    		
-    	});
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(submitButton);
-        buttonPanel.add(cancelButton);
-        popup.add(buttonPanel, BorderLayout.PAGE_END);
-        popup.setLocationRelativeTo(null);
-        popup.pack();
-        popup.setVisible(true);
-        return popup;
-    }
-
+   
 
 
 
