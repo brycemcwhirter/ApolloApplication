@@ -7,7 +7,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
@@ -15,8 +21,10 @@ import apollo.Swing.PopupManager;
 import apollo.Enum.Tier;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
@@ -35,7 +43,6 @@ import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Toolkit;
 
 
 /**
@@ -67,6 +74,8 @@ public class Controller extends JPanel {
 	static JScrollPane pane;
 	public static Boolean listviewMode = true;
     private static final long serialVersionUID = 1L;
+    static JComboBox<String> colSelect;
+    static TableRowSorter<TableModel> sorter;
 
 
 
@@ -166,6 +175,8 @@ public class Controller extends JPanel {
          */
         setTopButtonPanel(mainPanel);
         setTablePanel(mainPanel);
+        setFilter(mainPanel);
+
 
         /**
          * Adding Panels to Main Frame
@@ -231,7 +242,7 @@ public class Controller extends JPanel {
 
 
 
-
+        
 
 
 
@@ -250,12 +261,7 @@ public class Controller extends JPanel {
      */
     public static void setTopButtonPanel(JPanel mainPanel) {
 
-        JPanel topButtonPanel = new JPanel();
-        //topButtonPanel.setLayout(new FlowLayout());
-
-
-
-        /** Add New Person Button
+        /** Add New Person
          * 
          * This button is responsible for adding
          * a new person to the list
@@ -337,15 +343,19 @@ public class Controller extends JPanel {
 
                // System.out.println("List View");
                 if (!listviewMode) {
+                	listviewMode = true;
 	                Controller.mainPanel.removeAll();
 	            	setTopButtonPanel(Controller.mainPanel);
+	            	setFilter(Controller.mainPanel);
 	            	Controller.mainPanel.add(pane, BorderLayout.PAGE_END);
 	            	mainFrame.setSize(1000,350);
 	                mainFrame.setLocationRelativeTo(null);
-	                listviewMode = true;
                 }
             } 
         });
+        if (listviewMode) {
+            listView.setEnabled(false);
+        }
 
 
 
@@ -356,22 +366,23 @@ public class Controller extends JPanel {
         JButton graphicView = new JButton("Gallery View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Log.logger.info("Graphic View Button Pressed");
+                //TODO Modify graphic view button to show graphic view of PNM's
+                Log.logger.info("Gallery View");
 
-              //Remove everything, then add back button panel and gallery view
+            	//Remove everything, then add back button panel and gallery view
                 if (listviewMode) {
+                	listviewMode = false;
                 	try {
 						PopupManager.setGraphicPanel(Controller.mainPanel, mainFrame, mainRushClass);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-                	listviewMode = false;
                 }
             }
         });
-
-
-
+        if (!listviewMode) {
+            graphicView.setEnabled(false);
+        }
         
         /** Export to File Button
          * 
@@ -436,26 +447,46 @@ public class Controller extends JPanel {
                 PopupManager.eventPopup(mainRushClass);
             }
         });
-
         
+        JButton showEventsButton = new JButton("Show Events");
+        showEventsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                PopupManager.showEvents(mainRushClass.getEvents(), "");
+            }
+        });
+        
+        JButton addVouchNames = new JButton("Add Vouch Names");
+        addVouchNames.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	if (table.getSelectedRow() != -1) {
+                	PopupManager.addVouchPopup(model, table, mainRushClass);
+                }
+            }
+        });
+        
+        JPanel tableButtons = new JPanel(new GridLayout(0,3, 5, 5));
+        JPanel otherPanel = new JPanel(new GridLayout(0,2,5,5));
 
         // Adding Buttons to the button panel
-       
-        topButtonPanel.add(addNewPerson);
-        topButtonPanel.add(removePerson);
-        topButtonPanel.add(listView);
-        topButtonPanel.add(graphicView);
-        topButtonPanel.add(exportToFile);
-        topButtonPanel.add(editTier);
-        topButtonPanel.add(eventButton);
+        tableButtons.add(addNewPerson);
+        tableButtons.add(listView);
+        tableButtons.add(graphicView);
+        tableButtons.add(exportToFile);
+        tableButtons.add(eventButton);
+        tableButtons.add(showEventsButton);
+        
+        otherPanel.add(addVouchNames);
+        otherPanel.add(removePerson);
+        otherPanel.add(editTier);
 
-        // Button Panel Settings
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        topButtonPanel.setSize(screenSize.width, 1000);
-        topButtonPanel.setVisible(true);
+        tableButtons.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        otherPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
         // Adding button panel to main panel 
-        mainPanel.add(topButtonPanel, BorderLayout.CENTER);
+        mainPanel.add(tableButtons, BorderLayout.LINE_START);
+        if (listviewMode) {
+        	mainPanel.add(otherPanel, BorderLayout.LINE_END);
+        }
     }
 
     
@@ -474,40 +505,57 @@ public class Controller extends JPanel {
      */
     public static void setTablePanel(JPanel mainPanel) {
        
-        //TODO fix this function so that the table does not take up the whole screen and shows data
         model = new DefaultTableModel(columnNames, 0);
 
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
         table.setFillsViewportHeight(true);
+        sorter = new TableRowSorter<TableModel>(model);
+        table.setRowSorter(sorter);
         
         pane = new JScrollPane(table);
 
         mainPanel.add(pane, BorderLayout.PAGE_END);
     }
-
-
-
-
-
-
-
-
-
     
+    public static void setFilter(JPanel mainPanel) {
+    	JLabel filterLabel = new JLabel("Filter:");
+    	colSelect = new JComboBox<String>(columnNames);
+    	final JTextField filterText = new JTextField();
+        filterText.setPreferredSize(new Dimension(80,20));
+        filterText.getDocument().addDocumentListener(
+                new DocumentListener() {
+                    public void changedUpdate(DocumentEvent e) {
+                        newFilter(filterText);
+                    }
+                    public void insertUpdate(DocumentEvent e) {
+                        newFilter(filterText);
+                    }
+                    public void removeUpdate(DocumentEvent e) {
+                        newFilter(filterText);
+                    }
+                });
+    	
+        JTextField clear = new JTextField();
+    	newFilter(clear);
+    	JPanel other = new JPanel();
+        other.add(filterLabel);
+        other.add(colSelect);
+        other.add(filterText);
+        other.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        mainPanel.add(other, BorderLayout.CENTER);
+    }
+    
+    private static void newFilter(JTextField f) {
+    	RowFilter<? super TableModel, ? super Integer> rf = null;
+    	try {
+            rf = RowFilter.regexFilter(f.getText(), colSelect.getSelectedIndex());
+        } catch (java.util.regex.PatternSyntaxException e) {
+            return;
+        }
+        sorter.setRowFilter(rf);
+    }
   
-    
-    
-    
-    /** 
-     * createPopup
-     * 
-     * This function creates a popup
-     * 
-     * 
-     * @param title
-     * @return JDialog
-     */
     public static JDialog createPopup(String title) {
     	final JDialog popup = new JDialog(mainFrame, title);
     	GridLayout layout = new GridLayout(0,2);
