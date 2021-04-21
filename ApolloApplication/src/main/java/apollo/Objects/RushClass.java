@@ -3,14 +3,22 @@ package apollo.Objects;
 import apollo.Enum.Semester;
 import apollo.Enum.Tier;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RushClass {
 	int year;
     Semester s;
     List<PNM> members;
+    List<Event> events = new ArrayList<Event>();
 
-    public int getYear() {
+    public List<Event> getEvents() {
+		return events;
+	}
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
+	public int getYear() {
 		return year;
 	}
 	public void setYear(int year) {
@@ -44,6 +52,11 @@ public class RushClass {
 		if (index != -1) {
 			members.get(index).setT(t);
 		}
+	}
+	
+	public void addEventToPerson(String name, Event e) {
+		int index = findPerson(name);
+		members.get(index).getEventList().add(e);
 	}
 	
 	public int findPerson(String name) {

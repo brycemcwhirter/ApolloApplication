@@ -1,5 +1,6 @@
 package apollo.Objects;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +19,9 @@ public class PNM {
     List<String> vouchList;
     List<Event> eventList;
 
+	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+
+
     public PNM(String name, String hometown, String email, String major, boolean legacy, int age, String phoneNumber,
             Tier temp) {
         this.name = name;
@@ -28,6 +32,12 @@ public class PNM {
         this.age = age;
         this.phoneNumber = phoneNumber;
         this.t = temp;
+        this.vouchList = new ArrayList<String>();
+        this.eventList = new ArrayList<Event>();
+    }
+    
+    public static String[] getColumnNames() {
+        return columnNames;
     }
 
     public String getName() {
