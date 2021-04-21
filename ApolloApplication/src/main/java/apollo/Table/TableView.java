@@ -19,6 +19,12 @@ public class TableView {
         TableView.listviewMode = listviewMode;
     }
 
+    /** 
+     * listView
+     * 
+     * This function sets the view to list view
+     * 
+     */
     public static void listView() {
         Controller.getMainpanel().removeAll();
         Controller.setTopButtonPanel(Controller.getMainpanel());
@@ -28,12 +34,18 @@ public class TableView {
         Controller.getMainFrame().setLocationRelativeTo(null);
     }
 
+    /** 
+     * galleryView
+     * 
+     * This function sets the view to gallery view
+     * 
+     */
     public static void galleryView(){
         //Remove everything, then add back button panel and gallery view
         if (TableView.getListviewMode()) {
             TableView.setListviewMode(false);
             try {
-                PopupManager.setGraphicPanel(Controller.getMainpanel(), Controller.getMainFrame(), Controller.getMainRushClass());
+                PopupManager.setGraphicPanel();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

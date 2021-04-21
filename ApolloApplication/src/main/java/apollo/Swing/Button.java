@@ -17,19 +17,24 @@ public class Button {
     public static void importDatabase(){
         Controller.mainPage();
         List<PNM> members = FileManager.importFile();
-        PopupManager.createRushClass(members, Controller.getMainRushClass(), Controller.getMainFrame());
+        PopupManager.createRushClass(members);
 
     }
 
+    /** 
+     * addNewPerson
+     * 
+     * This function creates and adds a new PNM to the rush class
+     * 
+     */
     public static void addNewPerson(){
-
-        //System.out.println("Add Person");
         final JDialog popup = PopupManager.createPopup("Add Person");
         //Action listener for adding a person button
         PopupManager.getSubmitButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] temp = new String[PNM.getColumnNames().length];
+                //Get information from the text fields
                 for (int i = 0; i < PNM.getColumnNames().length; i++) {
                     temp[i] = PopupManager.getEditFields()[i].getText();
                 }
@@ -46,13 +51,17 @@ public class Button {
 
     }
 
-
+    /** 
+     * removePerson
+     * 
+     * This function removes the selected person from the rush class
+     * 
+     */
     public static void removePerson(){
-
-        //System.out.println("Remove Person");
         //Check to make sure that a row is selected
         if (Controller.getTable().getSelectedRow() != -1) {
             Object[] options = {"Yes", "No"};
+            //Create a option pane to record response
             int n = JOptionPane.showOptionDialog(Controller.getMainFrame(),
                     "Are you sure you want to remove " + (Controller.getModel().getValueAt(Controller.getTable().getSelectedRow(), 0)) + "?",
                     "Delete Row?",

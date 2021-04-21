@@ -49,15 +49,10 @@ import java.awt.Font;
  */
 public class Controller extends JPanel {
 
-
-
-
 	public enum viewState {
 		LIST,
 		GALLERY;
 	}
-	
-
 
 	static DefaultTableModel model;
     static JFrame mainFrame = new JFrame();
@@ -134,7 +129,7 @@ public class Controller extends JPanel {
                 Log.logger.info("New Database");
                 mainPage();
                 List<PNM> members = new ArrayList<PNM>();
-                PopupManager.createRushClass(members, mainRushClass, mainFrame);
+                PopupManager.createRushClass(members);
             }
         });
 
@@ -157,9 +152,6 @@ public class Controller extends JPanel {
         panel.setBackground(new Color(0, 163, 224));
 
         // Showing Frame
-        // Just found this set location relative to
-        // function that will put the frame to the center
-        // every time
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setBackground(new Color(0, 163, 224));
@@ -190,7 +182,6 @@ public class Controller extends JPanel {
         setTablePanel(mainPanel);
         setFilter(mainPanel);
 
-
         /**
          * Adding Panels to Main Frame
          */
@@ -199,27 +190,6 @@ public class Controller extends JPanel {
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
     }
-
-
-
-
-
-
-
-
-
-    
-    
-
-
-
-        
-
-
-
-
-  
-
 
     
     /** 
@@ -241,7 +211,6 @@ public class Controller extends JPanel {
         addNewPerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("Add Person Button Pressed");
-
                 Button.addNewPerson();
 
                 
@@ -258,9 +227,7 @@ public class Controller extends JPanel {
         JButton removePerson = new JButton("Remove Person");
         removePerson.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
                 Log.logger.info("Remove Person Button Pressed");
-
                 Button.removePerson();
             }
         });
@@ -277,8 +244,8 @@ public class Controller extends JPanel {
             	//Remove everything, then add back button panel and table
 
                 Log.logger.info("List View Button Pressed");
-
-               // System.out.println("List View");
+                
+                //Can only switch if not already in list view
                 if (!TableView.getListviewMode()) {
                     TableView.setListviewMode(true);
                     TableView.listView();
@@ -299,12 +266,12 @@ public class Controller extends JPanel {
         JButton graphicView = new JButton("Gallery View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO Modify graphic view button to show graphic view of PNM's
-                Log.logger.info("Gallery View");
+            	Log.logger.info("Gallery View");
                 TableView.galleryView();
             	
             }
         });
+        //If the page is in gallery view, make the gallery view button disabled
         if (!TableView.getListviewMode()) {
             graphicView.setEnabled(false);
         }
@@ -316,32 +283,45 @@ public class Controller extends JPanel {
         JMenuItem exportToFile = new JMenuItem("Export PNMs");
         exportToFile.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Log.logger.info("Exporting File");
-                FileManager.exportFile();
-				
+                	Log.logger.info("Exporting File");
+                	FileManager.exportFile();
 				}
             }
         );
         
+        /** Edit Tier Button
+         * 
+         * This button is responsible for editing
+         * the tier of the selected person
+         */
         JButton editTier = new JButton("Edit Tier");
         editTier.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Log.logger.info("Editing Tier");
-                //System.out.println("Edit Tier");
                 //Check to make sure that a row is selected
                 if (table.getSelectedRow() != -1) {
-                	PopupManager.tierPopup(model, table, mainRushClass);
+                	PopupManager.tierPopup();
                 }
             }
         });
         
+        /** Create Event Button
+         * 
+         * This button is responsible for creating
+         * an event and linking them with the attendees
+         */
         JButton eventButton = new JButton("Create Event");
         eventButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                PopupManager.eventPopup(mainRushClass);
+                PopupManager.eventPopup();
             }
         });
         
+        /** Show Events Button
+         * 
+         * This button is responsible for displaying
+         * all the events in the rush class
+         */
         JButton showEventsButton = new JButton("Show Events");
         showEventsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -349,15 +329,25 @@ public class Controller extends JPanel {
             }
         });
         
+        /** Add Vouch Names Button
+         * 
+         * This button is responsible for add
+         * names to the selected persons vouch list
+         */
         JButton addVouchNames = new JButton("Add Vouch Names");
         addVouchNames.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	if (table.getSelectedRow() != -1) {
-                	PopupManager.addVouchPopup(model, table, mainRushClass);
+                	PopupManager.addVouchPopup();
                 }
             }
         });
         
+        /** Import Events Menu Item
+         * 
+         * This menu item is responsible for importing
+         * events for the rush class
+         */
         JMenuItem importEvents = new JMenuItem("Import Events");
         importEvents.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -365,6 +355,11 @@ public class Controller extends JPanel {
             }
         });
         
+        /** Import Vouch List Menu Item
+         * 
+         * This menu item is responsible for importing
+         * the vouch list for each person in the rush class
+         */
         JMenuItem importVouchList = new JMenuItem("Import Vouch List");
         importVouchList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -372,6 +367,11 @@ public class Controller extends JPanel {
             }
         });
         
+        /** Export Vouch List Menu Item
+         * 
+         * This menu item is responsible for exporting
+         * the vouch list names of each person to a csv file
+         */
         JMenuItem exportVouchList = new JMenuItem("Export Vouch List");
         exportVouchList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -379,6 +379,11 @@ public class Controller extends JPanel {
             }
         });
         
+        /** Export Events Menu Item
+         * 
+         * This menu item is responsible for exporting
+         * the events and attendees to a csv file
+         */
         JMenuItem exportEvents = new JMenuItem("Export Events");
         exportEvents.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -386,6 +391,7 @@ public class Controller extends JPanel {
             }
         });
         
+        //Create a main menu bar
         JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Main Menu");
         menuBar.add(menu);
@@ -410,6 +416,7 @@ public class Controller extends JPanel {
         otherPanel.add(removePerson);
         otherPanel.add(editTier);
 
+        //Set borders for panels
         tableButtons.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         otherPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 
@@ -420,13 +427,6 @@ public class Controller extends JPanel {
         }
     }
 
-    
-
-
-
-
-
-
     /** 
      * setTablePanel
      * 
@@ -435,25 +435,32 @@ public class Controller extends JPanel {
      * @param   mainPanel   the main panel of the open page
      */
     public static void setTablePanel(JPanel mainPanel) {
-       
+       //Create a blank table
         model = new DefaultTableModel(PNM.getColumnNames(), 0);
 
+        //Set up table model and sorter
         table = new JTable(model);
         table.setPreferredScrollableViewportSize(new Dimension(400, 200));
         table.setFillsViewportHeight(true);
         sorter = new TableRowSorter<TableModel>(model);
         table.setRowSorter(sorter);
-        
         pane = new JScrollPane(table);
 
         mainPanel.add(pane, BorderLayout.PAGE_END);
     }
     
+    /** 
+     * setFilter
+     * 
+     * Adds the filter section to the passed panel
+     * @param   mainPanel   the main panel of the open page
+     */
     public static void setFilter(JPanel mainPanel) {
     	JLabel filterLabel = new JLabel("Filter:");
     	colSelect = new JComboBox<String>(PNM.getColumnNames());
     	final JTextField filterText = new JTextField();
         filterText.setPreferredSize(new Dimension(80,20));
+        //Check if the text field has been changed
         filterText.getDocument().addDocumentListener(
                 new DocumentListener() {
                     public void changedUpdate(DocumentEvent e) {
@@ -466,7 +473,7 @@ public class Controller extends JPanel {
                         newFilter(filterText);
                     }
                 });
-    	
+    	//Clear the filter before adding
         JTextField clear = new JTextField();
     	newFilter(clear);
     	JPanel other = new JPanel();
@@ -477,6 +484,13 @@ public class Controller extends JPanel {
         mainPanel.add(other, BorderLayout.CENTER);
     }
     
+    /** 
+     * newFilter
+     * 
+     * This function controls the filter/sorter for the table depending 
+     * 	on the text field
+     * @param   mainPanel   the main panel of the open page
+     */
     private static void newFilter(JTextField f) {
     	RowFilter<? super TableModel, ? super Integer> rf = null;
     	try {
@@ -484,15 +498,9 @@ public class Controller extends JPanel {
         } catch (java.util.regex.PatternSyntaxException e) {
             return;
         }
+    	//Set the table sorter to the correct filter
         sorter.setRowFilter(rf);
     }
-  
-   
-
-
-
-
-
 
 
     /**
