@@ -47,6 +47,7 @@ public class PopupManager {
     private static JTextField[] editFields;
 	private static JLabel[] editLabels;
 	static JButton submitButton;
+	static String enterYear = null;
 
 	public static JButton getSubmitButton() {
 		return submitButton;
@@ -155,7 +156,11 @@ public class PopupManager {
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                mainRushClass.setYear(Integer.parseInt(year.getText()));
+            	if (year.getText().length() < 1) {
+            		mainRushClass.setYear(0);
+            	}
+            	else
+            		mainRushClass.setYear(Integer.parseInt(year.getText()));
                 mainRushClass.setMembers(list);
                 JLabel semesterLabel = new JLabel("Semester: " + mainRushClass.getS().toString());
                 JLabel yearLabel = new JLabel("Year: " + year.getText());

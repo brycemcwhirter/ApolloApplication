@@ -33,6 +33,10 @@ public class Button {
                 for (int i = 0; i < PNM.getColumnNames().length; i++) {
                     temp[i] = PopupManager.getEditFields()[i].getText();
                 }
+                if (temp[4].equals("true"))
+                	temp[4] = "false";
+                if (!temp[7].equals("RED") && !temp[7].equals("GRAY") && !temp[7].equals("YELLOW"))
+                	temp[7] = "GRAY";
                 PNM pnm = new PNM(temp[0], temp[1], temp[2], temp[3], Boolean.parseBoolean(temp[4]), Integer.parseInt(temp[5]), 
                         temp[6], Tier.valueOf(temp[7]));
                 Controller.getMainRushClass().addMember(pnm);
