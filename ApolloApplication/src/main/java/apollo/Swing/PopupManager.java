@@ -29,17 +29,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
-import javax.swing.table.DefaultTableModel;
 
 import apollo.Controller;
 import apollo.Enum.Semester;
 import apollo.Enum.Tier;
 import apollo.Objects.Event;
 import apollo.Objects.PNM;
-import apollo.Objects.RushClass;
 
 public class PopupManager {
 
@@ -57,20 +54,25 @@ public class PopupManager {
 		return editFields;
 	}
 
-
-
-
-	public static void eventPopup(final RushClass mainRushClass) {
+	/** 
+     * eventPopup
+     * 
+     * This function creates a popup so that the user can 
+     * 	create a new event
+     */
+	public static void eventPopup() {
     	final JFrame popup = new JFrame("New Event");
     	JPanel mainP = new JPanel();
     	mainP.setLayout(new GridLayout(0,2));
     	
+    	//Create labels for popup
     	final JTextField fields[] = new JTextField[3];
     	JLabel labels[] = new JLabel[3];
     	labels[0] = new JLabel("Name: ");
     	labels[1] = new JLabel("Date (mm/dd/yyyy): ");
     	labels[2] = new JLabel("Location: ");
         
+    	//Populate popup with labels and text fields
         for (int i = 0; i < 3; i++) {
         	fields[i] = new JTextField();
         	fields[i].setBounds(20, 220, 100, 25);
@@ -82,33 +84,34 @@ public class PopupManager {
         JButton submitButton = new JButton("Submit");
         popup.add(submitButton, BorderLayout.PAGE_END);
         
-        
+        //Create JCheckBoxes for each PNM and add to panel
         JPanel namePanel = new JPanel(new GridLayout(0,3));
-        final JCheckBox names[] = new JCheckBox[mainRushClass.getMembers().size()];
-        for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
-        	names[i] = new JCheckBox(mainRushClass.getMembers().get(i).getName());
+        final JCheckBox names[] = new JCheckBox[Controller.getMainRushClass().getMembers().size()];
+        for (int i = 0; i < Controller.getMainRushClass().getMembers().size(); i++) {
+        	names[i] = new JCheckBox(Controller.getMainRushClass().getMembers().get(i).getName());
         	namePanel.add(names[i]);
         }
         popup.add(namePanel, BorderLayout.CENTER);
         
+        //Check for click of submit button
         submitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//create event and add to each person
 				try {
 					Date d = new SimpleDateFormat("mm/dd/yyyy").parse(fields[1].getText());
 					Event event = new Event(fields[0].getText(), d, fields[2].getText());
-					for (int i = 0; i < mainRushClass.getMembers().size(); i++) {
+					//Add the attendees to the event
+					for (int i = 0; i < Controller.getMainRushClass().getMembers().size(); i++) {
 			        	if (names[i].isSelected()) {
-			        		mainRushClass.addEventToPerson(names[i].getText(), event);
-			        		int index = mainRushClass.findPerson(names[i].getText());
-			        		event.getAttendees().add(mainRushClass.getMembers().get(index));
+			        		Controller.getMainRushClass().addEventToPerson(names[i].getText(), event);
+			        		int index = Controller.getMainRushClass().findPerson(names[i].getText());
+			        		event.getAttendees().add(Controller.getMainRushClass().getMembers().get(index));
 			        	}
 			        }
-					mainRushClass.getEvents().add(event);
+					Controller.getMainRushClass().getEvents().add(event);
 				} catch (ParseException e1) {
 					e1.printStackTrace();
 				}
-			
 				popup.setVisible(false);
 				popup.dispose();
 			}
@@ -120,8 +123,16 @@ public class PopupManager {
         popup.setLocationRelativeTo(null);
     }
 	
-	public static void createRushClass(final List<PNM> list, final RushClass mainRushClass, final JFrame mainFrame) {
-    	
+	/** 
+     * createRushClass
+     * 
+     * This function creates a popup so that the user can 
+     * 	enter the semester and year for the rush class
+     * 
+     * @param   list   the list of PNMs to add to the rush class
+     */
+	public static void createRushClass(final List<PNM> list) {
+    	//Create a grid layout
     	GridLayout layout = new GridLayout(0,2);
     	JPanel mainPanel = new JPanel();
     	mainPanel.setLayout(layout);
@@ -137,15 +148,16 @@ public class PopupManager {
     	
     	//Create a JComboBox to select the semester
     	Semester[] semesters = {Semester.FALL, Semester.SPRING};
-    	mainRushClass.setS(Semester.FALL);
+    	Controller.getMainRushClass().setS(Semester.FALL);
     	final JComboBox<Semester> semesterList = new JComboBox<Semester>(semesters);
     	semesterList.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Semester input = (Semester) semesterList.getSelectedItem();
-                mainRushClass.setS(input);
+                Controller.getMainRushClass().setS(input);
             }
         });
     	
+    	//Add to panel
     	popup.add(mainPanel, BorderLayout.NORTH);
     	popup.add(semesterList);
     	popup.setVisible(true);
@@ -156,6 +168,7 @@ public class PopupManager {
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
             	if (year.getText().length() < 1) {
             		mainRushClass.setYear(0);
             	}
@@ -163,13 +176,20 @@ public class PopupManager {
             		mainRushClass.setYear(Integer.parseInt(year.getText()));
                 mainRushClass.setMembers(list);
                 JLabel semesterLabel = new JLabel("Semester: " + mainRushClass.getS().toString());
+=======
+            	//Assign values to the rush class
+            	Controller.getMainRushClass().setYear(Integer.parseInt(year.getText()));
+            	Controller.getMainRushClass().setMembers(list);
+                JLabel semesterLabel = new JLabel("Semester: " + Controller.getMainRushClass().getS().toString());
+>>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
                 JLabel yearLabel = new JLabel("Year: " + year.getText());
                 JPanel top = new JPanel();
                 top.add(semesterLabel);
                 top.add(yearLabel);
-                mainFrame.add(top, BorderLayout.PAGE_START);
-                mainFrame.pack();
-                mainFrame.setSize(1000,350);
+                //Add rush class information to top of frame
+                Controller.getMainFrame().add(top, BorderLayout.PAGE_START);
+                Controller.getMainFrame().pack();
+                Controller.getMainFrame().setSize(1000,350);
                 
                 popup.setVisible(false);
                 popup.dispose();
@@ -180,40 +200,60 @@ public class PopupManager {
         popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
 	
+<<<<<<< HEAD
 
 	public static  void setGraphicPanel(JPanel mainPanel, JFrame mainFrame, final RushClass mainRushClass) throws IOException {
     	mainPanel.removeAll();
     	Controller.setTopButtonPanel(mainPanel);
+=======
+	/** 
+     * setGraphicPanel
+     * 
+     * This function sets the frame to the gallery view
+     * 
+     * @param   list   the list of PNMs to add to the rush class
+     */
+	public static  void setGraphicPanel() throws IOException {
+    	//Clear panel and add back top button panel
+		Controller.getMainpanel().removeAll();
+    	Controller.setTopButtonPanel(Controller.getMainpanel());
+>>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
     	JPanel blank = new JPanel();
-    	mainPanel.add(blank, BorderLayout.CENTER);
+    	Controller.getMainpanel().add(blank, BorderLayout.CENTER);
         
     	//Remove everything, then add back button panel and gallery view
+<<<<<<< HEAD
 
         List<PNM> members = mainRushClass.getMembers();
         GridLayout lay = new GridLayout(0,3);
         lay.setHgap(10);
         lay.setVgap(10);
+=======
+        List<PNM> members = Controller.getMainRushClass().getMembers();
+        GridLayout lay = new GridLayout(0,3, 10, 10);
+>>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
         JPanel graphicPanel = new JPanel();
         graphicPanel.setLayout(lay);
         JScrollPane scroll = new JScrollPane(graphicPanel);
-        mainPanel.add(scroll, BorderLayout.PAGE_END);
+        Controller.getMainpanel().add(scroll, BorderLayout.PAGE_END);
         final JButton buttons[] = new JButton[members.size()];
         //For each person, create a new panel with their information and add to grid
         for (int i = 0; i < members.size(); i++) {
         	final int j = i;
-        	JPanel p = new JPanel(new GridLayout(5,1));
+        	JPanel p = new JPanel(new GridLayout(0,1));
         	JLabel text = new JLabel(members.get(i).getName());
-        	JLabel text2 = new JLabel(members.get(i).getMajor());
-        	JLabel text3 = new JLabel(members.get(i).getPhoneNumber());
+        	JLabel text2 = new JLabel("Legacy Status: " + members.get(i).getLegacy());
+        	JLabel text3 = new JLabel("Tier: " + members.get(i).getT());
         	p.add(text);
         	p.add(text2);
 
         	p.add(text3);
         	buttons[i] = new JButton("More");
         	buttons[i].setName(members.get(i).getName());
+        	//Check if button is clicked
         	buttons[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                	openMore(buttons[j].getName(), mainRushClass);
+                	openMore(buttons[j].getName());
                 }
             });
         	p.add(buttons[i]);
@@ -221,11 +261,24 @@ public class PopupManager {
         	graphicPanel.add(p);
         }
         
-        mainFrame.pack();
-        mainFrame.setLocationRelativeTo(null);
+        Controller.getMainFrame().pack();
+        Controller.getMainFrame().setLocationRelativeTo(null);
     }
 	
+<<<<<<< HEAD
 
+=======
+	/** 
+     * resize
+     * 
+     * This function resizes a BufferedImage
+     * 
+     * @param   img   			the the BufferedImage to resize
+     * @param	newW  			the new width of the image
+     * @param	newH  			the new height of the image
+     * @return  BufferedImage	the resized image
+     */
+>>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
 	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
 	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
@@ -237,10 +290,17 @@ public class PopupManager {
 	    return dimg;
 	} 
 	
-	protected static void openMore(String name, final RushClass mainRushClass) {
+	/** 
+     * openMore
+     * 
+     * This function opens the "more" page for the selected PNM
+     * 
+     * @param   name   the name of the PNM
+     */
+	protected static void openMore(String name) {
 		final JFrame popup = new JFrame("More Information");
-		final int index = mainRushClass.findPerson(name);
-		final PNM currPNM = mainRushClass.getMembers().get(index);
+		final int index = Controller.getMainRushClass().findPerson(name);
+		final PNM currPNM = Controller.getMainRushClass().getMembers().get(index);
 		GridLayout layout = new GridLayout(5,2);
 		layout.setHgap(10);
 		layout.setVgap(10);
@@ -257,6 +317,7 @@ public class PopupManager {
 			e.printStackTrace();
 		}
 		
+		//Populate the popup with the PNM's information
 		JPanel mainPanel = new JPanel(layout);
 		JLabel l = new JLabel("Name: " + currPNM.getName());
 		mainPanel.add(l);
@@ -286,19 +347,21 @@ public class PopupManager {
             	showEvents(currPNM.getEventList(), currPNM.getName());
             }
         });
+		//Add buttons to panel
 		mainPanel.add(vouchButton);
 		mainPanel.add(eventButton);
 		
+		//Check if buttons are clicked
 		JButton next = new JButton("Next");
 		next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	iteratePerson("Next", popup, index, mainRushClass);
+            	iteratePerson("Next", popup, index);
             }
         });
 		JButton prev = new JButton("Prev");
 		prev.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	iteratePerson("Prev", popup, index, mainRushClass);
+            	iteratePerson("Prev", popup, index);
             }
         });
 		
@@ -314,6 +377,15 @@ public class PopupManager {
 		popup.setLocationRelativeTo(null);
 	}
 	
+	/** 
+     * showEvents
+     * 
+     * This function opens a new popup window that displays all the event
+     * 	in the rush class
+     * 
+     * @param	events the list of events to display
+     * @param   name   the name to display
+     */
 	public static void showEvents(List<Event> events, String name) {
 		final JFrame eventPopup = new JFrame("Event List");
 		GridLayout layout = new GridLayout(0, 3);
@@ -321,6 +393,7 @@ public class PopupManager {
 		layout.setVgap(10);	
 		JPanel eventPanel = new JPanel(layout);
 		
+		//Check if there are events to display
 		if (events.size() == 0 && name != "") {
 			JLabel error = new JLabel(name + " has not attended any events");
 			eventPopup.add(error, BorderLayout.CENTER);
@@ -328,7 +401,7 @@ public class PopupManager {
 			JLabel error = new JLabel("There are no events");
 			eventPopup.add(error, BorderLayout.CENTER);
 		} else {
-			
+			//Display the events in a grid layout
 			eventPanel.add(new JLabel("Name"));
 			eventPanel.add(new JLabel("Date"));
 			eventPanel.add(new JLabel("Location"));
@@ -350,6 +423,7 @@ public class PopupManager {
 			}
 			eventPopup.add(eventPanel, BorderLayout.CENTER);
 		}
+		//If done is clicked, close the popup
     	JButton done = new JButton("Done");
     	done.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -365,16 +439,26 @@ public class PopupManager {
     	eventPopup.setLocationRelativeTo(null);
 	}
 	
+	/** 
+     * vouchListPopup
+     * 
+     * This function opens a new popup window that displays all the names
+     * 	in the selected PNMs vouch list
+     * 
+     * @param	currPNM the selected PNM
+     */
 	public static void vouchListPopup(PNM currPNM) {
 		final JFrame vouchPopup = new JFrame("Vouch List");
 		GridLayout layout = new GridLayout(currPNM.getVouchList().size()/3, 3);
 		layout.setHgap(10);
 		layout.setVgap(10);
 		JPanel title = new JPanel();
+		//Create title for the popup
 		JLabel titleL = new JLabel("Vouch List for " + currPNM.getName());
 		title.add(titleL);
 		vouchPopup.add(title, BorderLayout.PAGE_START);
 		
+		//Check if vouch list has names
 		JPanel namesPanel = new JPanel(layout);
 		if (currPNM.getVouchList().size() == 0) {
 			JLabel error = new JLabel("No People in Vouch List");
@@ -388,6 +472,7 @@ public class PopupManager {
 			}
 			vouchPopup.add(namesPanel, BorderLayout.CENTER);
 		}
+		//If done is clicked, close the popup
     	JButton done = new JButton("Done");
     	done.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -403,18 +488,31 @@ public class PopupManager {
     	vouchPopup.setLocationRelativeTo(null);
 	}
 	
-	public static void addVouchPopup(DefaultTableModel model, JTable table, final RushClass mainRushClass) {
+	/** 
+     * addVouchPopup
+     * 
+     * This function opens a new popup window with a text field
+     * 	so that the user can enter names to be added to the
+     * 	selected PNMs vouch list
+     * 
+     * @param	currPNM the selected PNM
+     */
+	public static void addVouchPopup() {
+		//Create popup
 		final JFrame popup = new JFrame("Edit Tier");
-		final int index = mainRushClass.findPerson((String) model.getValueAt(table.getSelectedRow(), 0));
-    	JLabel name = new JLabel("Adding vouch names for " + (String) model.getValueAt(table.getSelectedRow(), 0));
+		final int index = Controller.getMainRushClass().findPerson((String) 
+				Controller.getModel().getValueAt(Controller.getTable().getSelectedRow(), 0));
+    	JLabel name = new JLabel("Adding vouch names for " + (String) 
+    			Controller.getModel().getValueAt(Controller.getTable().getSelectedRow(), 0));
     	name.setFont(new Font("Arial Hebrew", Font.PLAIN, 15));
     	final JTextField text = new JTextField();
     	text.setPreferredSize(new Dimension(100,20));
     	
+    	//If submit is clicked, add name to vouch list and clear text field
     	JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	mainRushClass.getMembers().get(index).getVouchList().add(text.getText());
+            	Controller.getMainRushClass().getMembers().get(index).getVouchList().add(text.getText());
             	text.setText("");
             }
         });
@@ -425,6 +523,7 @@ public class PopupManager {
         p.add(submitButton);
         popup.add(p, BorderLayout.CENTER);
         
+        //If done is clicked, close popup
         JButton done = new JButton("Done");
     	done.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -441,38 +540,59 @@ public class PopupManager {
     	popup.setLocationRelativeTo(null);
 	}
 	
-	public static void iteratePerson(String s, JFrame popup, int index, RushClass mainRushClass) {
-		if (s == "Next" && index < mainRushClass.getMembers().size()-1) {
+	/** 
+     * iteratePerson
+     * 
+     * This function iterates to the next or previous person if possible
+     * 
+     * @param	s 		whether to iterate forward or backward
+     * @param	popup	the original popup to discard
+     * @param	index	the index of the original PNM
+     */
+	public static void iteratePerson(String s, JFrame popup, int index) {
+		//Check if the iteration is valid
+		if (s == "Next" && index < Controller.getMainRushClass().getMembers().size()-1) {
 			popup.setVisible(false);
 			popup.dispose();
-			openMore(mainRushClass.getMembers().get(++index).getName(), mainRushClass);
+			openMore(Controller.getMainRushClass().getMembers().get(++index).getName());
 		} else if (s == "Prev" && index > 0){
 			popup.setVisible(false);
 			popup.dispose();
-			openMore(mainRushClass.getMembers().get(--index).getName(), mainRushClass);
+			openMore(Controller.getMainRushClass().getMembers().get(--index).getName());
 		} else {
 			JOptionPane.showMessageDialog(popup,"Cannot Move to Next Person","Error",JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
-	public static void tierPopup(final DefaultTableModel model, final JTable table, final RushClass mainRushClass) {
+	/** 
+     * tierPopup
+     * 
+     * This function opens a popup to edit the tier of the selected PNM
+     *
+     */
+	public static void tierPopup() {
+		//Create the popup
 		final JFrame popup = new JFrame("Edit Tier");
-    	JLabel name = new JLabel("Editing " + (String) model.getValueAt(table.getSelectedRow(), 0) + "'s tier");
+    	JLabel name = new JLabel("Editing " + (String) 
+    			Controller.getModel().getValueAt(Controller.getTable().getSelectedRow(), 0) + "'s tier");
     	name.setFont(new Font("Arial Hebrew", Font.PLAIN, 15));
     	Tier[] tiers = {Tier.GRAY, Tier.GREEN, Tier.RED};
     	final JComboBox<Tier> tierSelect = new JComboBox<Tier>(tiers);
     	
+    	//If submit is clicked, change the tier of the PNM
     	JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	table.setValueAt(tierSelect.getSelectedItem(), table.getSelectedRow(), 7);
-            	mainRushClass.editTier((String) model.getValueAt(table.getSelectedRow(), 0), 
+            	Controller.getTable().setValueAt(tierSelect.getSelectedItem(), Controller.getTable().getSelectedRow(), 7);
+            	Controller.getMainRushClass().editTier((String) 
+            			Controller.getModel().getValueAt(Controller.getTable().getSelectedRow(), 0), 
             			(Tier) tierSelect.getSelectedItem());
                 
                 popup.setVisible(false);
                 popup.dispose();
             }
         });
+        //Add panels to the popup
         name.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
         popup.add(name, BorderLayout.PAGE_START);
         JPanel p = new JPanel();
@@ -487,6 +607,13 @@ public class PopupManager {
 
 	}
 
+	/** 
+     * tierPopup
+     * 
+     * This function opens a popup to add a person to the rush class
+     * 
+     * @param	title	the title of the popup
+     */
 	public static JDialog createPopup(String title) {
     	final JDialog popup = new JDialog(Controller.getMainFrame(), title);
     	GridLayout layout = new GridLayout(0,2);
@@ -517,7 +644,7 @@ public class PopupManager {
 			}
     		
     	});
-        
+        //Add buttons to popup
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(submitButton);
         buttonPanel.add(cancelButton);

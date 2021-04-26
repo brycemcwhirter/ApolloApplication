@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 2021-04-21 17:26:27 INFO apollo.Log <clinit> starting the app
 2021-04-21 17:26:27 INFO apollo.Controller$2 actionPerformed Import Database
 2021-04-21 17:26:27 FINE java.awt.Container mixOnHiding this = javax.swing.CellRendererPane[,0,0,0x0,invalid,hidden]; isLightweight=false
@@ -6620,3 +6621,5 @@
 2021-04-21 17:26:55 FINEST java.awt.Component dispatchEventImpl sun.awt.TimedWindowEvent[WINDOW_CLOSING,opposite=null,oldState=0,newState=0] on frame2
 2021-04-21 17:26:55 FINER java.awt.KeyboardFocusManager retargetFocusEvent >>> sun.awt.TimedWindowEvent[WINDOW_CLOSING,opposite=null,oldState=0,newState=0] on frame2
 2021-04-21 17:26:55 FINE java.awt.DefaultKeyboardFocusManager dispatchEvent sun.awt.TimedWindowEvent[WINDOW_CLOSING,opposite=null,oldState=0,newState=0] on frame2
+=======
+>>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1

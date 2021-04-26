@@ -40,6 +40,13 @@ public class RushClass {
 		this.members.add(pnm);
 	}
 	
+	/** 
+     * removePerson
+     * 
+     * This function removes the given PNM from the rush class
+     * 
+     * @param	name	the name of the PNM to remove
+     */
 	public void removePerson(String name) {
 		int index = findPerson(name);
 		if (index != -1) {
@@ -47,6 +54,14 @@ public class RushClass {
 		}
 	}
 	
+	/** 
+     * editTier
+     * 
+     * This function edits the tier of the given PNM
+     * 
+     * @param	name	the name of the PNM to find
+     * @param  	t		the tier to be set
+     */
 	public void editTier(String name, Tier t) {
 		int index = findPerson(name);
 		if (index != -1) {
@@ -54,16 +69,35 @@ public class RushClass {
 		}
 	}
 	
+	/** 
+     * addEventToPerson
+     * 
+     * This function adds the passed event to the given PNM
+     * 
+     * @param	name	the name of the PNM to find
+     * @param  	e		the event to add
+     */
 	public void addEventToPerson(String name, Event e) {
 		int index = findPerson(name);
-		members.get(index).getEventList().add(e);
+		if (index != -1) {
+			members.get(index).getEventList().add(e);
+		}
 	}
 	
+	/** 
+     * findPerson
+     * 
+     * This function returns the index of the given PNM when
+     * 	given the name
+     * 
+     * @param	name	the name of the PNM to find
+     * @return  int		the index of the PNM in the rush class
+     */
 	public int findPerson(String name) {
 		Boolean found = false;
 		int index = 0;
 		while (!found && index != members.size()) {
-			if (name == members.get(index).getName()) {
+			if (name.contains(members.get(index).getName())) {
 				found = true;
 			} else {
 				index++;

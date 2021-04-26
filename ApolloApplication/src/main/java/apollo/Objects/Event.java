@@ -37,6 +37,7 @@ public class Event {
         this.name = n;
         this.date = d;
         this.location = l;
+        this.attendees = new ArrayList<PNM>();
 
     }
 
