@@ -35,7 +35,7 @@ public class Button {
                 }
                 if (temp[4].equals("true"))
                 	temp[4] = "false";
-                if (!temp[7].equals("RED") && !temp[7].equals("GRAY") && !temp[7].equals("YELLOW"))
+                if (!temp[7].equals("RED") && !temp[7].equals("GRAY") && !temp[7].equals("GREEN"))
                 	temp[7] = "GRAY";
                 PNM pnm = new PNM(temp[0], temp[1], temp[2], temp[3], Boolean.parseBoolean(temp[4]), Integer.parseInt(temp[5]), 
                         temp[6], Tier.valueOf(temp[7]));
