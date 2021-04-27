@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -41,6 +42,23 @@ import apollo.Objects.PNM;
 import apollo.Objects.RushClass;
 
 public class PopupManager {
+
+
+    private static JTextField[] editFields;
+	private static JLabel[] editLabels;
+	static JButton submitButton;
+
+	public static JButton getSubmitButton() {
+		return submitButton;
+	}
+
+	public static JTextField[] getEditFields() {
+		return editFields;
+	}
+
+
+
+
 	public static void eventPopup(final RushClass mainRushClass) {
     	final JFrame popup = new JFrame("New Event");
     	JPanel mainP = new JPanel();
@@ -459,5 +477,47 @@ public class PopupManager {
     	popup.setLocationRelativeTo(null);
 
 	}
+
+	public static JDialog createPopup(String title) {
+    	final JDialog popup = new JDialog(Controller.getMainFrame(), title);
+    	GridLayout layout = new GridLayout(0,2);
+    	JPanel mainPanel = new JPanel();
+    	mainPanel.setLayout(layout);
+    	
+    	editFields = new JTextField[PNM.getColumnNames().length];
+    	editLabels = new JLabel[PNM.getColumnNames().length];
+        
+    	//Create the correct amount of edit fields and add them to the panel
+        for (int i = 0; i < PNM.getColumnNames().length; i++) {
+        	editFields[i] = new JTextField();
+        	editFields[i].setBounds(20, 220, 100, 25);
+        	editLabels[i] = new JLabel(PNM.getColumnNames()[i] + ":");
+        	mainPanel.add(editLabels[i]);
+        	mainPanel.add(editFields[i]);
+        }
+      
+        popup.add(mainPanel, BorderLayout.NORTH);
+        submitButton = new JButton("Submit");
+        JButton cancelButton = new JButton("Cancel");
+        
+        cancelButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				popup.setVisible(false);
+				popup.dispose();
+			}
+    		
+    	});
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(submitButton);
+        buttonPanel.add(cancelButton);
+        popup.add(buttonPanel, BorderLayout.PAGE_END);
+        popup.setLocationRelativeTo(null);
+        popup.pack();
+        popup.setVisible(true);
+        return popup;
+    }
+
 	
 }

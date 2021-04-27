@@ -19,6 +19,9 @@ public class PNM {
     List<String> vouchList;
     List<Event> eventList;
 
+	static String columnNames[] = { "Name", "Hometown", "Email", "Major", "Legacy", "Age", "Phone Number", "Tier" };
+
+
     public PNM(String name, String hometown, String email, String major, boolean legacy, int age, String phoneNumber,
             Tier temp) {
         this.name = name;
@@ -31,6 +34,10 @@ public class PNM {
         this.t = temp;
         this.vouchList = new ArrayList<String>();
         this.eventList = new ArrayList<Event>();
+    }
+    
+    public static String[] getColumnNames() {
+        return columnNames;
     }
 
     public String getName() {
