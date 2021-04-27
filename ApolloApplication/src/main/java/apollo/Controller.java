@@ -10,6 +10,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -36,6 +38,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -62,7 +65,11 @@ public class Controller extends JPanel {
 	static JScrollPane pane;
     private static final long serialVersionUID = 1L;
     static JComboBox<String> colSelect;
+    static JComboBox<String> sortSelect;
+    static JButton sortAsc = new JButton("ASC");
+    static JButton sortDes = new JButton("DESC");
     static TableRowSorter<TableModel> sorter;
+    static int sortType = -1;
 
 
     public static RushClass getMainRushClass() {
@@ -187,7 +194,7 @@ public class Controller extends JPanel {
          * Adding Panels to Main Frame
          */
         mainFrame.add(mainPanel);
-        mainFrame.setSize(1000,350);
+        mainFrame.setSize(1250,350);
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setVisible(true);
     }
@@ -456,9 +463,11 @@ public class Controller extends JPanel {
      * Adds the filter section to the passed panel
      * @param   mainPanel   the main panel of the open page
      */
-    public static void setFilter(JPanel mainPanel) {
+    public static void setFilter(final JPanel mainPanel) {
     	JLabel filterLabel = new JLabel("Filter:");
+    	JLabel organize = new JLabel("Sort:");
     	colSelect = new JComboBox<String>(PNM.getColumnNames());
+    	sortSelect = new JComboBox<String>(PNM.getColumnNames());
     	final JTextField filterText = new JTextField();
         filterText.setPreferredSize(new Dimension(80,20));
         //Check if the text field has been changed
@@ -478,11 +487,56 @@ public class Controller extends JPanel {
         JTextField clear = new JTextField();
     	newFilter(clear);
     	JPanel other = new JPanel();
+    	other.add(organize);
+        other.add(sortSelect);
+        other.add(sortAsc);
+        other.add(sortDes);
         other.add(filterLabel);
         other.add(colSelect);
         other.add(filterText);
         other.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
+        
+        sortAsc.setPreferredSize(new Dimension(80,20));
+        sortDes.setPreferredSize(new Dimension(80,20));
+        sortAsc.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		int i = sortSelect.getSelectedIndex();
+            	setSorter(mainPanel, i, 0);
+            }
+        });
+        sortDes.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		int i = sortSelect.getSelectedIndex();
+            	setSorter(mainPanel, i, 1);
+            }
+        });
         mainPanel.add(other, BorderLayout.CENTER);
+    }
+    
+    /** 
+     * setSorter
+     * 
+     * Adds button to enable sorting
+     * @param   mainPanel   the main panel of the open page
+     */
+    public static void setSorter(JPanel mainPanel, int i, int k) {
+    	sorter = new TableRowSorter<>(table.getModel());
+    	table.setRowSorter(sorter);
+    	List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+    	
+    	int col = i;
+    	if (col > -1 && k == 0) {
+    		sortKeys.add(new RowSorter.SortKey(col, SortOrder.ASCENDING));
+    		sorter.setSortKeys(sortKeys);
+    		sorter.sort();
+    		sortType = 0;
+    	}
+    	else if (col > -1 && k == 1) {
+    		sortKeys.add(new RowSorter.SortKey(col, SortOrder.DESCENDING));
+    		sorter.setSortKeys(sortKeys);
+    		sorter.sort();
+    		sortType = 1;
+    	}
     }
     
     /** 

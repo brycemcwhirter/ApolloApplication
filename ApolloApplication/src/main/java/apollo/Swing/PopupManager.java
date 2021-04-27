@@ -168,20 +168,10 @@ public class PopupManager {
         JButton submitButton = new JButton("Submit");
         submitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-            	if (year.getText().length() < 1) {
-            		mainRushClass.setYear(0);
-            	}
-            	else
-            		mainRushClass.setYear(Integer.parseInt(year.getText()));
-                mainRushClass.setMembers(list);
-                JLabel semesterLabel = new JLabel("Semester: " + mainRushClass.getS().toString());
-=======
             	//Assign values to the rush class
             	Controller.getMainRushClass().setYear(Integer.parseInt(year.getText()));
             	Controller.getMainRushClass().setMembers(list);
                 JLabel semesterLabel = new JLabel("Semester: " + Controller.getMainRushClass().getS().toString());
->>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
                 JLabel yearLabel = new JLabel("Year: " + year.getText());
                 JPanel top = new JPanel();
                 top.add(semesterLabel);
@@ -189,7 +179,7 @@ public class PopupManager {
                 //Add rush class information to top of frame
                 Controller.getMainFrame().add(top, BorderLayout.PAGE_START);
                 Controller.getMainFrame().pack();
-                Controller.getMainFrame().setSize(1000,350);
+                Controller.getMainFrame().setSize(1250,350);
                 
                 popup.setVisible(false);
                 popup.dispose();
@@ -199,13 +189,6 @@ public class PopupManager {
         buttonPanel.add(submitButton);
         popup.add(buttonPanel, BorderLayout.PAGE_END);
     }
-	
-<<<<<<< HEAD
-
-	public static  void setGraphicPanel(JPanel mainPanel, JFrame mainFrame, final RushClass mainRushClass) throws IOException {
-    	mainPanel.removeAll();
-    	Controller.setTopButtonPanel(mainPanel);
-=======
 	/** 
      * setGraphicPanel
      * 
@@ -217,21 +200,12 @@ public class PopupManager {
     	//Clear panel and add back top button panel
 		Controller.getMainpanel().removeAll();
     	Controller.setTopButtonPanel(Controller.getMainpanel());
->>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
     	JPanel blank = new JPanel();
     	Controller.getMainpanel().add(blank, BorderLayout.CENTER);
         
     	//Remove everything, then add back button panel and gallery view
-<<<<<<< HEAD
-
-        List<PNM> members = mainRushClass.getMembers();
-        GridLayout lay = new GridLayout(0,3);
-        lay.setHgap(10);
-        lay.setVgap(10);
-=======
         List<PNM> members = Controller.getMainRushClass().getMembers();
         GridLayout lay = new GridLayout(0,3, 10, 10);
->>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
         JPanel graphicPanel = new JPanel();
         graphicPanel.setLayout(lay);
         JScrollPane scroll = new JScrollPane(graphicPanel);
@@ -265,20 +239,6 @@ public class PopupManager {
         Controller.getMainFrame().setLocationRelativeTo(null);
     }
 	
-<<<<<<< HEAD
-
-=======
-	/** 
-     * resize
-     * 
-     * This function resizes a BufferedImage
-     * 
-     * @param   img   			the the BufferedImage to resize
-     * @param	newW  			the new width of the image
-     * @param	newH  			the new height of the image
-     * @return  BufferedImage	the resized image
-     */
->>>>>>> 9d8f39bec0ecba5f7fb8c3e0f91f0052fee6fad1
 	public static BufferedImage resize(BufferedImage img, int newW, int newH) { 
 	    Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
 	    BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
