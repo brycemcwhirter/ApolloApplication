@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import apollo.Enum.*;
-import apollo.Objects.*;
+
 
 public class Test {
 	private static void createAndShowGUI() throws FileNotFoundException {
