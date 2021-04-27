@@ -113,7 +113,7 @@ public class Controller extends JPanel {
 
         // Added a New JLabel. Don't know if this is necesary.
         JLabel label = new JLabel("Apollo");
-        BufferedImage logo = ImageIO.read(new File("ApolloLogo.png"));
+        BufferedImage logo = ImageIO.read(new File("ApolloApplication/src/main/resources/images/ApolloLogo.png"));
         JLabel img = new JLabel(new ImageIcon(logo));
         img.setPreferredSize(new Dimension(200,150));
         
