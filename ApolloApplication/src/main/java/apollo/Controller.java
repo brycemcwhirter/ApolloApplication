@@ -198,27 +198,6 @@ public class Controller extends JPanel {
     }
 
 
-
-
-
-
-
-
-
-    
-    
-
-
-
-        
-
-
-
-
-  
-
-
-    
     /** 
      * setTopButtonPanel
      * 
@@ -245,7 +224,7 @@ public class Controller extends JPanel {
             } 
         });
 
-        
+
 
         /** Remove Person Button
          * 
@@ -296,7 +275,7 @@ public class Controller extends JPanel {
         JButton graphicView = new JButton("Gallery View");
         graphicView.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO Modify graphic view button to show graphic view of PNM's
+
                 Log.logger.info("Gallery View");
                 TableView.galleryView();
             	
@@ -408,6 +387,9 @@ public class Controller extends JPanel {
 
         mainPanel.add(pane, BorderLayout.PAGE_END);
     }
+    
+
+
     
     public static void setFilter(JPanel mainPanel) {
     	JLabel filterLabel = new JLabel("Filter:");
