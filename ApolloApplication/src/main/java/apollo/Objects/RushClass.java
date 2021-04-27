@@ -9,7 +9,7 @@ import java.util.List;
 public class RushClass {
 	int year;
 	Semester s;
-	List<PNM> members;
+	List<PNM> members = new ArrayList<PNM>();
 	List<Event> events = new ArrayList<Event>();
 
 	public List<Event> getEvents() {

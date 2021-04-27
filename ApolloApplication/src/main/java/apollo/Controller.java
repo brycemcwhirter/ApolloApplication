@@ -189,6 +189,7 @@ public class Controller extends JPanel {
 		mainFrame.setSize(1250, 350);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	/**
