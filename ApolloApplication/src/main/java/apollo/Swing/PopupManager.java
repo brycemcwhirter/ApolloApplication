@@ -227,7 +227,12 @@ public class PopupManager {
         	//Check if button is clicked
         	buttons[i].addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                	openMore(buttons[j].getName());
+                	try {
+						openMore(buttons[j].getName());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                 }
             });
         	p.add(buttons[i]);
@@ -256,8 +261,9 @@ public class PopupManager {
      * This function opens the "more" page for the selected PNM
      * 
      * @param   name   the name of the PNM
+	 * @throws IOException 
      */
-	protected static void openMore(String name) {
+	protected static void openMore(String name) throws IOException {
 		final JFrame popup = new JFrame("More Information");
 		final int index = Controller.getMainRushClass().findPerson(name);
 		final PNM currPNM = Controller.getMainRushClass().getMembers().get(index);
@@ -265,17 +271,20 @@ public class PopupManager {
 		layout.setHgap(10);
 		layout.setVgap(10);
 		
+		String imgName = "Photos/" + currPNM.getName() + ".png";
+		
 		BufferedImage logo;
 		try {
-			logo = ImageIO.read(new File("DefaultSilhouette.jpg"));
-			BufferedImage newLogo = resize(logo, 200,200);
-			JLabel img = new JLabel(new ImageIcon(newLogo));
-			JPanel imgPanel = new JPanel();
-			imgPanel.add(img);
-	        popup.add(imgPanel, BorderLayout.CENTER);
+			logo = ImageIO.read(new File(imgName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			logo = ImageIO.read(new File("DefaultSilhouette.jpg"));
 		}
+		BufferedImage newLogo = resize(logo, 200,200);
+		JLabel img = new JLabel(new ImageIcon(newLogo));
+		JPanel imgPanel = new JPanel();
+		imgPanel.add(img);
+        popup.add(imgPanel, BorderLayout.CENTER);
 		
 		//Populate the popup with the PNM's information
 		JPanel mainPanel = new JPanel(layout);
@@ -315,13 +324,23 @@ public class PopupManager {
 		JButton next = new JButton("Next");
 		next.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	iteratePerson("Next", popup, index);
+            	try {
+					iteratePerson("Next", popup, index);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
         });
 		JButton prev = new JButton("Prev");
 		prev.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	iteratePerson("Prev", popup, index);
+            	try {
+					iteratePerson("Prev", popup, index);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
             }
         });
 		
@@ -508,8 +527,9 @@ public class PopupManager {
      * @param	s 		whether to iterate forward or backward
      * @param	popup	the original popup to discard
      * @param	index	the index of the original PNM
+	 * @throws IOException 
      */
-	public static void iteratePerson(String s, JFrame popup, int index) {
+	public static void iteratePerson(String s, JFrame popup, int index) throws IOException {
 		//Check if the iteration is valid
 		if (s == "Next" && index < Controller.getMainRushClass().getMembers().size()-1) {
 			popup.setVisible(false);
