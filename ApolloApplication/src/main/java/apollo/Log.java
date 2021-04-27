@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 
 public class Log {
 
-    public final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+	public final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
-    static {
+	static {
 		try {
 			InputStream configFile = Log.class.getClassLoader().getResourceAsStream("logger.properties");
 			LogManager.getLogManager().readConfiguration(configFile);
@@ -20,5 +20,5 @@ public class Log {
 		}
 		logger.info("starting the app");
 	}
-    
+
 }
