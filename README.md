@@ -4,8 +4,8 @@
 ### Built utilizing Java Swing
 
 
-Team Members
-Sheldon Smith
+### Team Members
+Sheldon Smith 
 Bryce McWhirter
 Carson King
 Malik Mohamedali
