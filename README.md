@@ -5,7 +5,4 @@
 
 
 ### Team Members
-Sheldon Smith 
-Bryce McWhirter
-Carson King
-Malik Mohamedali
+Sheldon Smith, Bryce McWhirter, Carson King, Malik Mohamedali
